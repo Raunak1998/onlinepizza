@@ -3,7 +3,6 @@ package com.cg.onlinepizza.model;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,7 +29,7 @@ public class Order {
 	@Column(name = "total_cost")
 	private double totalCost;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
 	
@@ -38,7 +37,7 @@ public class Order {
 	@JoinTable(name = "pizza_order_details", joinColumns = {@JoinColumn(name = "order_id")}, inverseJoinColumns = {@JoinColumn(name = "pizza_id")})
 	private List<Pizza> pizzas;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "coupon_name")
 	private Coupon coupon; 
 
