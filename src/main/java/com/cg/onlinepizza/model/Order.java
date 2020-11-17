@@ -35,7 +35,7 @@ public class Order {
 	private Customer customer;
 	
 	@ManyToMany
-	@JoinTable(name = "pizza_order", joinColumns = {@JoinColumn(name = "order_id")}, inverseJoinColumns = {@JoinColumn(name = "pizza_id")})
+	@JoinTable(name = "order_pizza_details", joinColumns = {@JoinColumn(name = "order_id")}, inverseJoinColumns = {@JoinColumn(name = "pizza_id")})
 	private List<Pizza> pizzas;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
