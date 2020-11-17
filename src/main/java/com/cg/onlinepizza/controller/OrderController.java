@@ -24,17 +24,19 @@ public class OrderController {
 	@Autowired
 	OrderService orderService;
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PutMapping("/update")
 	public ResponseEntity<List<Order>> updateCoupon(
 			@RequestBody Order order){
 		List<Order> orders = orderService.updateOrder(order);
 		if(orders.isEmpty())
 		{
-			return new ResponseEntity("Sorry! orders not available!",HttpStatus.NOT_FOUND);
+			return new ResponseEntity("Sorry! Orders not available!",HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<List<Order>>(orders,HttpStatus.OK);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/insert")
 	public ResponseEntity<List<Order>> insertCustomer(
 			@RequestBody Order order){
@@ -46,6 +48,7 @@ public class OrderController {
 		return new ResponseEntity<List<Order>>(orders,HttpStatus.OK);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@DeleteMapping("/delete/{orderId}")
 	public ResponseEntity<List<Order>> deleteCustomer(
 			@PathVariable("orderId")int orderId){
@@ -58,18 +61,20 @@ public class OrderController {
 		return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GetMapping("/find/{orderId}")
 	public ResponseEntity<Order> findCustomer(
 			@PathVariable("orderId")int orderId){
 		Order order= orderService.findCustomer(orderId);
 		if(order==null) {
-			return new ResponseEntity("Sorry! Orders not found!", 
+			return new ResponseEntity("Sorry! Order not found!", 
 					HttpStatus.NOT_FOUND);
 		}
 
 		return new ResponseEntity<Order>(order, HttpStatus.OK);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GetMapping("/findAll")
 	public ResponseEntity<List<Order>> getAllCustomers(){
 		List<Order> orders= orderService.getAllOrders();

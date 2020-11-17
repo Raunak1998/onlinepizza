@@ -25,13 +25,8 @@ public class CustomerController {
 
 	@Autowired
 	private CustomerService customerService;
-	
-	@RequestMapping("/hellocustomer")
-	public String helloCustomer()
-	{
-		return "hello customer";
-	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PutMapping("/update")
 	public ResponseEntity<List<Customer>> updateCoupon(
 			@RequestBody Customer customer){
@@ -43,41 +38,45 @@ public class CustomerController {
 		return new ResponseEntity<List<Customer>>(customers,HttpStatus.OK);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/insert")
 	public ResponseEntity<List<Customer>> insertCustomer(
 			@RequestBody Customer customer){
 		List<Customer> customers = customerService.saveCustomer(customer);
 		if(customers.isEmpty())
 		{
-			return new ResponseEntity("Sorry! Customer not available!",HttpStatus.NOT_FOUND);
+			return new ResponseEntity("Sorry! Customer could not be inserted!",HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<List<Customer>>(customers,HttpStatus.OK);
 	}
 
-	@DeleteMapping("/delete/{customerName}")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@DeleteMapping("/delete/{customerId}")
 	public ResponseEntity<List<Customer>> deleteCustomer(
-			@PathVariable("customerName")int customerId){
+			@PathVariable("customerId")int customerId){
 		List<Customer> customers= customerService.deleteCustomer(customerId);
 		if(customers.isEmpty() || customers==null) {
-			return new ResponseEntity("Sorry! customerName not available!", 
+			return new ResponseEntity("Sorry! CustomerId not available!", 
 					HttpStatus.NOT_FOUND);
 		}
 
 		return new ResponseEntity<List<Customer>>(customers, HttpStatus.OK);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GetMapping("/find/{customerName}")
 	public ResponseEntity<Customer> findCustomer(
 			@PathVariable("customerName")int customerId){
 		Customer customer= customerService.findCustomer(customerId);
 		if(customer==null) {
-			return new ResponseEntity("Sorry! Customers not found!", 
+			return new ResponseEntity("Sorry! CustomerId not found!", 
 					HttpStatus.NOT_FOUND);
 		}
 
 		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GetMapping("/findAll")
 	public ResponseEntity<List<Customer>> getAllCustomers(){
 		List<Customer> customers= customerService.getAllCustomers();
