@@ -1,8 +1,12 @@
 package com.cg.onlinepizza.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface OrderRepository {
+import com.cg.onlinepizza.model.Order;
 
+@Repository
+public interface OrderRepository extends JpaRepository<Order, Integer>{
+
+//	public List<Order> findByusername(String username);
 }

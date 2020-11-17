@@ -1,6 +1,6 @@
 package com.cg.onlinepizza.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -25,7 +25,7 @@ public class Order {
 	private int orderId;
 	
 	@Column(name = "order_date")
-	private Date orderDate;
+	private LocalDate orderDate;
 	
 	@Column(name = "total_cost")
 	private double totalCost;
@@ -35,7 +35,7 @@ public class Order {
 	private Customer customer;
 	
 	@ManyToMany
-	@JoinTable(name = "order_pizza_details", joinColumns = {@JoinColumn(name = "order_id")}, inverseJoinColumns = {@JoinColumn(name = "pizza_id")})
+	@JoinTable(name = "pizza_order_details", joinColumns = {@JoinColumn(name = "order_id")}, inverseJoinColumns = {@JoinColumn(name = "pizza_id")})
 	private List<Pizza> pizzas;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -47,7 +47,7 @@ public class Order {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Order(int orderId, Date orderDate, double totalCost, Customer customer, List<Pizza> pizzas, Coupon coupon) {
+	public Order(int orderId, LocalDate orderDate, double totalCost, Customer customer, List<Pizza> pizzas, Coupon coupon) {
 		super();
 		this.orderId = orderId;
 		this.orderDate = orderDate;
@@ -57,11 +57,11 @@ public class Order {
 		this.coupon = coupon;
 	}
 
-	public Date getOrderDate() {
+	public LocalDate getOrderDate() {
 		return orderDate;
 	}
 
-	public void setOrderDate(Date orderDate) {
+	public void setOrderDate(LocalDate orderDate) {
 		this.orderDate = orderDate;
 	}
 
