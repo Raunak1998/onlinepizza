@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cg.onlinepizza.model.Coupon;
+import com.cg.onlinepizza.dto.CouponDTO;
 import com.cg.onlinepizza.service.CouponService;
 
 @RestController
@@ -26,63 +26,63 @@ public class CouponController {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PutMapping("/update")
-	public ResponseEntity<List<Coupon>> updateCoupon(
-			@RequestBody Coupon coupon){
-		List<Coupon> coupons = couponService.updateCoupon(coupon);
+	public ResponseEntity<List<CouponDTO>> updateCoupon(
+			@RequestBody CouponDTO couponDTO){
+		List<CouponDTO> coupons = couponService.updateCoupon(couponDTO);
 		if(coupons.isEmpty())
 		{
 			return new ResponseEntity("Sorry! Coupons not available!",HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<List<Coupon>>(coupons,HttpStatus.OK);
+		return new ResponseEntity<List<CouponDTO>>(coupons,HttpStatus.OK);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/insert")
-	public ResponseEntity<List<Coupon>> insertCoupon(
-			@RequestBody Coupon coupon){
-		List<Coupon> coupons = couponService.saveCoupon(coupon);
+	public ResponseEntity<List<CouponDTO>> insertCoupon(
+			@RequestBody CouponDTO couponDTO){
+		List<CouponDTO> coupons = couponService.saveCoupon(couponDTO);
 		if(coupons.isEmpty())
 		{
 			return new ResponseEntity("Sorry! Coupons could not be inserted!",HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<List<Coupon>>(coupons,HttpStatus.OK);
+		return new ResponseEntity<List<CouponDTO>>(coupons,HttpStatus.OK);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@DeleteMapping("/delete/{couponName}")
-	public ResponseEntity<List<Coupon>> deleteCoupon(
+	public ResponseEntity<List<CouponDTO>> deleteCoupon(
 			@PathVariable("couponName")String couponName){
-		List<Coupon> coupons= couponService.deleteCoupon(couponName);
+		List<CouponDTO> coupons= couponService.deleteCoupon(couponName);
 		if(coupons.isEmpty() || coupons==null) {
 			return new ResponseEntity("Sorry! Coupon Name not available!", 
 					HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<List<Coupon>>(coupons, HttpStatus.OK);
+		return new ResponseEntity<List<CouponDTO>>(coupons, HttpStatus.OK);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/find/{couponName}")
-	public ResponseEntity<Coupon> findCoupon(
+	public ResponseEntity<CouponDTO> findCoupon(
 			@PathVariable("couponName")String couponName){
-		Coupon coupon= couponService.findCoupon(couponName);
+		CouponDTO coupon= couponService.findCoupon(couponName);
 		if(coupon==null) {
 			return new ResponseEntity("Sorry! Coupon not found!", 
 					HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<Coupon>(coupon, HttpStatus.OK);
+		return new ResponseEntity<CouponDTO>(coupon, HttpStatus.OK);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GetMapping("/findAll")
-	public ResponseEntity<List<Coupon>> getAllCoupon(){
-		List<Coupon> coupons= couponService.getAllCoupon();
+	public ResponseEntity<List<CouponDTO>> getAllCoupon(){
+		List<CouponDTO> coupons= couponService.getAllCoupon();
 		if(coupons.isEmpty()) {
 			return new ResponseEntity("Sorry! Coupons not found!", 
 					HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<List<Coupon>>(coupons, HttpStatus.OK);
+		return new ResponseEntity<List<CouponDTO>>(coupons, HttpStatus.OK);
 	}
 }

@@ -1,12 +1,22 @@
 package com.cg.onlinepizza.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cg.onlinepizza.dto.CouponDTO;
+import com.cg.onlinepizza.dto.CustomerDTO;
+import com.cg.onlinepizza.dto.OrderDTO;
+import com.cg.onlinepizza.dto.PizzaDTO;
+import com.cg.onlinepizza.model.Coupon;
+import com.cg.onlinepizza.model.Customer;
 import com.cg.onlinepizza.model.Order;
+import com.cg.onlinepizza.model.Pizza;
 import com.cg.onlinepizza.repository.OrderRepository;
 import com.cg.onlinepizza.service.OrderService;
 
@@ -14,37 +24,160 @@ import com.cg.onlinepizza.service.OrderService;
 public class OrderServiceImpl implements OrderService {
 
 	@Autowired
-	private OrderRepository orderRepo;
+	private OrderRepository orderRepository;
+
+	public static OrderDTO entityToDTO(Order order) 
+	{
+		OrderDTO orderDTO = new OrderDTO();
+		orderDTO.setOrderId(order.getOrderId());
+		orderDTO.setOrderDate(order.getOrderDate());
+		orderDTO.setTotalCost(order.getTotalCost());
+		
+		CustomerDTO customerDTO = new CustomerDTO();
+		customerDTO.setCustomerId(order.getCustomer().getCustomerId());
+		customerDTO.setFirstName(order.getCustomer().getFirstName());
+		customerDTO.setLastName(order.getCustomer().getLastName());
+		customerDTO.setCustomerMobile(order.getCustomer().getCustomerMobile());
+		customerDTO.setCustomerAddress(order.getCustomer().getCustomerAddress());
+		customerDTO.setUserName(order.getCustomer().getUserName());
+		customerDTO.setPassword(order.getCustomer().getPassword());
+		customerDTO.setCustomerEmail(order.getCustomer().getCustomerEmail());
+		customerDTO.setOrder(null);
+		
+		orderDTO.setCustomer(customerDTO);
+		
+		Set<PizzaDTO> pizzasDTO = new HashSet<>();
+		Set<Pizza> pizzas = new HashSet<>(order.getPizzas());
+		for(Pizza p:pizzas)
+		{
+			PizzaDTO pizzaDTO = new PizzaDTO();
+			pizzaDTO.setPizzaId(p.getPizzaId());
+			pizzaDTO.setPizzaName(p.getPizzaName());
+			pizzaDTO.setPizzaSize(p.getPizzaSize());
+			pizzaDTO.setPizzaType(p.getPizzaType());
+			pizzaDTO.setPizzaCost(p.getPizzaCost());
+			pizzaDTO.setPizzaDescription(p.getPizzaDescription());
+			pizzasDTO.add(pizzaDTO);
+		}
+		
+		orderDTO.setPizzas(pizzasDTO);
+		
+		CouponDTO couponDTO = new CouponDTO();
+		couponDTO.setCouponName(order.getCoupon().getCouponName());
+		couponDTO.setCouponType(order.getCoupon().getCouponType());
+		couponDTO.setCouponDescription(order.getCoupon().getCouponDescription());
+		
+		orderDTO.setCoupon(couponDTO);
+		return orderDTO;
+	}
+	
+	public static Order DTOToEntity(OrderDTO orderDTO)
+	{
+		Order order = new Order();
+		order.setOrderId(orderDTO.getOrderId());
+		order.setOrderDate(orderDTO.getOrderDate());
+		order.setTotalCost(orderDTO.getTotalCost());
+		
+		Customer customer = new Customer();
+		customer.setCustomerId(orderDTO.getCustomer().getCustomerId());
+		customer.setFirstName(orderDTO.getCustomer().getFirstName());
+		customer.setLastName(orderDTO.getCustomer().getLastName());
+		customer.setCustomerMobile(orderDTO.getCustomer().getCustomerMobile());
+		customer.setCustomerAddress(orderDTO.getCustomer().getCustomerAddress());
+		customer.setUserName(orderDTO.getCustomer().getUserName());
+		customer.setPassword(orderDTO.getCustomer().getPassword());
+		customer.setCustomerEmail(orderDTO.getCustomer().getCustomerEmail());
+		Set<Order> prev = new HashSet<>();
+		prev.add(order);
+		customer.setOrder(prev);
+		
+		order.setCustomer(customer);
+		
+		Set<Pizza> pizzas = new HashSet<>();
+		Set<PizzaDTO> pizzasDTO = new HashSet<>(orderDTO.getPizzas());
+		for(PizzaDTO p:pizzasDTO)
+		{
+			Pizza pizza = new Pizza();
+			pizza.setPizzaId(p.getPizzaId());
+			pizza.setPizzaName(p.getPizzaName());
+			pizza.setPizzaSize(p.getPizzaSize());
+			pizza.setPizzaType(p.getPizzaType());
+			pizza.setPizzaCost(p.getPizzaCost());
+			pizza.setPizzaDescription(p.getPizzaDescription());
+			pizzas.add(pizza);
+		}
+		
+		order.setPizzas(pizzas);
+		
+		Coupon coupon = new Coupon();
+		coupon.setCouponName(orderDTO.getCoupon().getCouponName());
+		coupon.setCouponType(orderDTO.getCoupon().getCouponType());
+		coupon.setCouponDescription(orderDTO.getCoupon().getCouponDescription());
+		
+		order.setCoupon(coupon);
+		return order;
+	}
+	
 	
 	@Override
-	public List<Order> getAllOrders() {
-		return orderRepo.findAll(); 
+	public List<OrderDTO> getAllOrders() {
+		List<OrderDTO> orderDTOReturn = new ArrayList<>();
+		for(Order o:orderRepository.findAll())
+		{
+			orderDTOReturn.add(entityToDTO(o));
+		}
+		
+		return  orderDTOReturn;
 	}
 
 	@Override
-	public Order findCustomer(Integer orderId) {
-		Optional<Order>order=orderRepo.findById(orderId);
-		return order.get();
+	public OrderDTO findCustomer(Integer orderId) {
+		Optional<Order>order = orderRepository.findById(orderId);
+		return entityToDTO(order.get());
 	}
 
 	@Override
-	public List<Order> deleteOrder(Integer orderId) {
-		orderRepo.deleteById(orderId);
-		return orderRepo.findAll();
+	public List<OrderDTO> deleteOrder(Integer orderId) {
+		orderRepository.deleteById(orderId);
+		List<OrderDTO> orderDTOReturn = new ArrayList<>();
+		for(Order o:orderRepository.findAll())
+		{
+			orderDTOReturn.add(entityToDTO(o));
+		}
+		
+		return  orderDTOReturn;
 	}
 
 	@Override
-	public List<Order> saveOrder(Order order) {
-		orderRepo.saveAndFlush(order);
-
-		return  orderRepo.findAll();
+	public List<OrderDTO> saveOrder(OrderDTO orderDTO) {
+		Order order = new Order();
+		order = DTOToEntity(orderDTO);
+		
+		orderRepository.saveAndFlush(order);
+		
+		List<OrderDTO> orderDTOReturn = new ArrayList<>();
+		for(Order o:orderRepository.findAll())
+		{
+			orderDTOReturn.add(entityToDTO(o));
+		}
+		
+		return  orderDTOReturn;
 	}
 
 	@Override
-	public List<Order> updateOrder(Order order) {
-		orderRepo.save(order);
-
-		return  orderRepo.findAll();
+	public List<OrderDTO> updateOrder(OrderDTO orderDTO) {
+		Order order = new Order();
+		order = DTOToEntity(orderDTO);
+		
+		orderRepository.save(order);
+		
+		List<OrderDTO> orderDTOReturn = new ArrayList<>();
+		for(Order o:orderRepository.findAll())
+		{
+			orderDTOReturn.add(entityToDTO(o));
+		}
+		
+		return  orderDTOReturn;
 	}
 
 }

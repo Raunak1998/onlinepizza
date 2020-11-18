@@ -4,18 +4,18 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.cg.onlinepizza.model.Order;
+import com.cg.onlinepizza.dto.OrderDTO;
 
 @Service
 public interface OrderService {
 
-	public List<Order> getAllOrders();
+	public List<OrderDTO> getAllOrders();
 
-	public Order findCustomer(Integer orderId);
+	public OrderDTO findCustomer(Integer orderId);
 
-	public List<Order> deleteOrder(Integer orderId);
+	public List<OrderDTO> deleteOrder(Integer orderId);
 
-	public List<Order> saveOrder(Order order);
+	public List<OrderDTO> saveOrder(OrderDTO order);
 
-	public List<Order> updateOrder(Order order);
+	public List<OrderDTO> updateOrder(OrderDTO order);
 }

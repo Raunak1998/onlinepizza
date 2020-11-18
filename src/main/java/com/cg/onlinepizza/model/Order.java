@@ -1,5 +1,6 @@
 package com.cg.onlinepizza.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -16,7 +17,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "order_details")
-public class Order {
+public class Order implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "order_id")
@@ -100,7 +106,7 @@ public class Order {
 		return coupon;
 	}
 
-	public void setCoupan(Coupon coupon) {
+	public void setCoupon(Coupon coupon) {
 		this.coupon = coupon;
 	}
 

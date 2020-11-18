@@ -4,19 +4,19 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.cg.onlinepizza.model.Coupon;
+import com.cg.onlinepizza.dto.CouponDTO;
 
 @Service
 public interface CouponService {
 	
-	public List<Coupon> getAllCoupon();
+	public List<CouponDTO> getAllCoupon();
 
-	public Coupon findCoupon(String couponName);
+	public CouponDTO findCoupon(String couponName);
 
-	public List<Coupon> deleteCoupon(String couponName);
+	public List<CouponDTO> deleteCoupon(String couponName);
 
-	public List<Coupon> saveCoupon(Coupon coupon);
+	public List<CouponDTO> saveCoupon(CouponDTO couponDTO);
 
-	public List<Coupon> updateCoupon(Coupon coupon);
+	public List<CouponDTO> updateCoupon(CouponDTO couponDTO);
 
 }

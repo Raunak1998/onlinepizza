@@ -1,7 +1,14 @@
 package com.cg.onlinepizza.dto;
 
-public class CouponDTO {
+import java.io.Serializable;
+
+public class CouponDTO implements Serializable{
 	
+		/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 		private String couponName;
 
 		private String couponType;
