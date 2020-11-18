@@ -1,7 +1,7 @@
 package com.cg.onlinepizza.model;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,7 +35,7 @@ public class Order {
 	
 	@ManyToMany
 	@JoinTable(name = "pizza_order_details", joinColumns = {@JoinColumn(name = "order_id")}, inverseJoinColumns = {@JoinColumn(name = "pizza_id")})
-	private List<Pizza> pizzas;
+	private Set<Pizza> pizzas;
 	
 	@ManyToOne
 	@JoinColumn(name = "coupon_name")
@@ -46,7 +46,7 @@ public class Order {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Order(int orderId, LocalDate orderDate, double totalCost, Customer customer, List<Pizza> pizzas, Coupon coupon) {
+	public Order(int orderId, LocalDate orderDate, double totalCost, Customer customer, Set<Pizza> pizzas, Coupon coupon) {
 		super();
 		this.orderId = orderId;
 		this.orderDate = orderDate;
@@ -88,11 +88,11 @@ public class Order {
 		this.customer = customer;
 	}
 
-	public List<Pizza> getPizzas() {
+	public Set<Pizza> getPizzas() {
 		return pizzas;
 	}
 
-	public void setPizzas(List<Pizza> pizzas) {
+	public void setPizzas(Set<Pizza> pizzas) {
 		this.pizzas = pizzas;
 	}
 

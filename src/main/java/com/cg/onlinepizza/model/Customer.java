@@ -1,6 +1,6 @@
 package com.cg.onlinepizza.model;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,7 +44,7 @@ public class Customer {
 	
 	@OneToMany(mappedBy = "customer")
 	@JsonIgnore
-	private List<Order> order;
+	private Set<Order> order;
 
 	public Customer() {
 		super();
@@ -52,7 +52,7 @@ public class Customer {
 	}
 
 	public Customer(int customerId, String firstName, String lastName, Long customerMobile, String customerEmail,
-			String customerAddress, String userName, String password, List<Order> order) {
+			String customerAddress, String userName, String password, Set<Order> order) {
 		super();
 		this.customerId = customerId;
 		this.firstName = firstName;
@@ -64,8 +64,6 @@ public class Customer {
 		this.password = password;
 		this.order = order;
 	}
-
-
 
 	public int getCustomerId() {
 		return customerId;
@@ -131,11 +129,11 @@ public class Customer {
 		this.password = password;
 	}
 
-	public List<Order> getOrder() {
+	public Set<Order> getOrder() {
 		return order;
 	}
 
-	public void setOrder(List<Order> order) {
+	public void setOrder(Set<Order> order) {
 		this.order = order;
 	}
 
