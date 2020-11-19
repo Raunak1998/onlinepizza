@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 public class OrderDTO implements Serializable{
 
 	/**
@@ -11,16 +15,24 @@ public class OrderDTO implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@NotNull
 	private int orderId;
 	
+	@NotNull
+	@FutureOrPresent
 	private LocalDate orderDate;
 	
+	@NotNull
+	@Positive
 	private double totalCost;
 	
+	@NotNull
 	private CustomerDTO customer;
 	
+	@NotNull
 	private Set<PizzaDTO> pizzas;
 
+	@NotNull
 	private CouponDTO coupon; 
 
 

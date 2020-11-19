@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cg.onlinepizza.dto.CouponDTO;
+import com.cg.onlinepizza.exceptions.CouponAlreadyExistsException;
+import com.cg.onlinepizza.exceptions.CouponNotFoundException;
 import com.cg.onlinepizza.model.Coupon;
 import com.cg.onlinepizza.repository.CouponRepository;
 import com.cg.onlinepizza.service.CouponService;
@@ -50,9 +52,22 @@ public class CouponServiceImpl implements CouponService{
 	}
 
 	@Override
-	public List<CouponDTO> deleteCoupon(String couponName) {
-		couponRepository.deleteById(couponName);
+	public List<CouponDTO> deleteCoupon(String couponName) throws CouponNotFoundException{
 		List<CouponDTO> couponDTOReturn = new ArrayList<>();
+		Optional<Coupon>checkCoupon=couponRepository.findById(couponName);
+		if(!checkCoupon.isPresent())
+		{
+			throw new CouponNotFoundException("Coupon with name " + couponName + " not Found");
+		}
+		couponRepository.deleteById(couponName);
+		
+		List<Coupon>CouponEntityList=couponRepository.findAll();
+		
+		if(CouponEntityList==null || CouponEntityList.isEmpty())
+		{
+			throw new CouponNotFoundException("No Coupons Found"); 
+		}
+		
 		for(Coupon c:couponRepository.findAll())
 		{
 			couponDTOReturn.add(entityToDTO(c));
@@ -61,12 +76,17 @@ public class CouponServiceImpl implements CouponService{
 	}
 
 	@Override
-	public List<CouponDTO> saveCoupon(CouponDTO couponDTO) {
+	public List<CouponDTO> saveCoupon(CouponDTO couponDTO) throws CouponAlreadyExistsException{
 		Coupon coupon = new Coupon();
 		coupon = DTOToEntity(couponDTO);
 		
 		couponRepository.saveAndFlush(coupon);
 		
+		Optional<Coupon>returnCoupon=couponRepository.findById(coupon.getCouponName());
+		if(!returnCoupon.isPresent())
+		{
+			throw new CouponAlreadyExistsException("Coupon cannot be added");
+		}
 		List<CouponDTO> couponDTOReturn = new ArrayList<>();
 		for(Coupon c:couponRepository.findAll())
 		{
@@ -76,9 +96,15 @@ public class CouponServiceImpl implements CouponService{
 	}
 
 	@Override
-	public List<CouponDTO> updateCoupon(CouponDTO couponDTO) {
+	public List<CouponDTO> updateCoupon(CouponDTO couponDTO) throws CouponNotFoundException{
 		Coupon coupon = new Coupon();
 		coupon = DTOToEntity(couponDTO);
+		
+		Optional<Coupon>checkCoupon=couponRepository.findById(coupon.getCouponName());
+		if(!checkCoupon.isPresent())
+		{
+			throw new CouponNotFoundException("Coupon with name " + coupon.getCouponName() + " not Found");
+		}
 		
 		couponRepository.save(coupon);
 		
@@ -92,9 +118,13 @@ public class CouponServiceImpl implements CouponService{
 	}
 
 	@Override
-	public CouponDTO findCoupon(String couponName) {
-		Optional<Coupon>coupon=couponRepository.findById(couponName);
-		return entityToDTO(coupon.get());
+	public CouponDTO findCoupon(String couponName) throws CouponNotFoundException{
+		Optional<Coupon>checkCoupon=couponRepository.findById(couponName);
+		if(!checkCoupon.isPresent())
+		{
+			throw new CouponNotFoundException("Coupon with name " + couponName + " not Found");
+		}
+		return entityToDTO(checkCoupon.get());
 	}
 
 

@@ -13,6 +13,8 @@ import com.cg.onlinepizza.dto.CouponDTO;
 import com.cg.onlinepizza.dto.CustomerDTO;
 import com.cg.onlinepizza.dto.OrderDTO;
 import com.cg.onlinepizza.dto.PizzaDTO;
+import com.cg.onlinepizza.exceptions.DatabaseException;
+import com.cg.onlinepizza.exceptions.OrderIdNotFoundException;
 import com.cg.onlinepizza.model.Coupon;
 import com.cg.onlinepizza.model.Customer;
 import com.cg.onlinepizza.model.Order;
@@ -32,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
 		orderDTO.setOrderId(order.getOrderId());
 		orderDTO.setOrderDate(order.getOrderDate());
 		orderDTO.setTotalCost(order.getTotalCost());
-		
+
 		CustomerDTO customerDTO = new CustomerDTO();
 		customerDTO.setCustomerId(order.getCustomer().getCustomerId());
 		customerDTO.setFirstName(order.getCustomer().getFirstName());
@@ -43,9 +45,9 @@ public class OrderServiceImpl implements OrderService {
 		customerDTO.setPassword(order.getCustomer().getPassword());
 		customerDTO.setCustomerEmail(order.getCustomer().getCustomerEmail());
 		customerDTO.setOrder(null);
-		
+
 		orderDTO.setCustomer(customerDTO);
-		
+
 		Set<PizzaDTO> pizzasDTO = new HashSet<>();
 		Set<Pizza> pizzas = new HashSet<>(order.getPizzas());
 		for(Pizza p:pizzas)
@@ -59,25 +61,25 @@ public class OrderServiceImpl implements OrderService {
 			pizzaDTO.setPizzaDescription(p.getPizzaDescription());
 			pizzasDTO.add(pizzaDTO);
 		}
-		
+
 		orderDTO.setPizzas(pizzasDTO);
-		
+
 		CouponDTO couponDTO = new CouponDTO();
 		couponDTO.setCouponName(order.getCoupon().getCouponName());
 		couponDTO.setCouponType(order.getCoupon().getCouponType());
 		couponDTO.setCouponDescription(order.getCoupon().getCouponDescription());
-		
+
 		orderDTO.setCoupon(couponDTO);
 		return orderDTO;
 	}
-	
+
 	public static Order DTOToEntity(OrderDTO orderDTO)
 	{
 		Order order = new Order();
 		order.setOrderId(orderDTO.getOrderId());
 		order.setOrderDate(orderDTO.getOrderDate());
 		order.setTotalCost(orderDTO.getTotalCost());
-		
+
 		Customer customer = new Customer();
 		customer.setCustomerId(orderDTO.getCustomer().getCustomerId());
 		customer.setFirstName(orderDTO.getCustomer().getFirstName());
@@ -90,9 +92,9 @@ public class OrderServiceImpl implements OrderService {
 		Set<Order> prev = new HashSet<>();
 		prev.add(order);
 		customer.setOrder(prev);
-		
+
 		order.setCustomer(customer);
-		
+
 		Set<Pizza> pizzas = new HashSet<>();
 		Set<PizzaDTO> pizzasDTO = new HashSet<>(orderDTO.getPizzas());
 		for(PizzaDTO p:pizzasDTO)
@@ -106,77 +108,93 @@ public class OrderServiceImpl implements OrderService {
 			pizza.setPizzaDescription(p.getPizzaDescription());
 			pizzas.add(pizza);
 		}
-		
+
 		order.setPizzas(pizzas);
-		
+
 		Coupon coupon = new Coupon();
 		coupon.setCouponName(orderDTO.getCoupon().getCouponName());
 		coupon.setCouponType(orderDTO.getCoupon().getCouponType());
 		coupon.setCouponDescription(orderDTO.getCoupon().getCouponDescription());
-		
+
 		order.setCoupon(coupon);
 		return order;
 	}
-	
-	
+
+
+	@SuppressWarnings("unused")
 	@Override
-	public List<OrderDTO> getAllOrders() {
+	public List<OrderDTO> getAllOrders() throws OrderIdNotFoundException{
 		List<OrderDTO> orderDTOReturn = new ArrayList<>();
 		for(Order o:orderRepository.findAll())
 		{
 			orderDTOReturn.add(entityToDTO(o));
 		}
-		
+		if(orderDTOReturn==null)
+			throw new OrderIdNotFoundException("Orders not present in the database");
+
 		return  orderDTOReturn;
 	}
 
 	@Override
-	public OrderDTO findCustomer(Integer orderId) {
+	public OrderDTO findOrder(Integer orderId) throws OrderIdNotFoundException {
 		Optional<Order>order = orderRepository.findById(orderId);
+		if(!order.isPresent())
+		{
+			throw new OrderIdNotFoundException("OrderId not present in the database!");
+		}
 		return entityToDTO(order.get());
 	}
 
 	@Override
-	public List<OrderDTO> deleteOrder(Integer orderId) {
+	public List<OrderDTO> deleteOrder(Integer orderId) throws OrderIdNotFoundException{
+		Optional<Order>order = orderRepository.findById(orderId);
+		if(!order.isPresent())
+		{
+			throw new OrderIdNotFoundException("OrderId not present in the database!");
+		}	
 		orderRepository.deleteById(orderId);
 		List<OrderDTO> orderDTOReturn = new ArrayList<>();
 		for(Order o:orderRepository.findAll())
 		{
 			orderDTOReturn.add(entityToDTO(o));
 		}
-		
 		return  orderDTOReturn;
 	}
 
 	@Override
-	public List<OrderDTO> saveOrder(OrderDTO orderDTO) {
+	public List<OrderDTO> saveOrder(OrderDTO orderDTO) throws DatabaseException{
 		Order order = new Order();
 		order = DTOToEntity(orderDTO);
-		
-		orderRepository.saveAndFlush(order);
-		
+		Order orderCheck = new Order();
+		orderCheck = orderRepository.saveAndFlush(order);
+		if(orderCheck == null)
+		{
+			throw new DatabaseException("Order canned be added!");
+		}
 		List<OrderDTO> orderDTOReturn = new ArrayList<>();
 		for(Order o:orderRepository.findAll())
 		{
 			orderDTOReturn.add(entityToDTO(o));
 		}
-		
+
 		return  orderDTOReturn;
 	}
 
 	@Override
-	public List<OrderDTO> updateOrder(OrderDTO orderDTO) {
-		Order order = new Order();
-		order = DTOToEntity(orderDTO);
-		
-		orderRepository.save(order);
-		
+	public List<OrderDTO> updateOrder(OrderDTO orderDTO) throws OrderIdNotFoundException{
+		Optional<Order>order = orderRepository.findById(orderDTO.getOrderId());
+		if(!order.isPresent())
+		{
+			throw new OrderIdNotFoundException("OrderId not present in the database!");
+		}
+		Order order1 = new Order();
+		order1 = DTOToEntity(orderDTO);
+		orderRepository.save(order1);
 		List<OrderDTO> orderDTOReturn = new ArrayList<>();
 		for(Order o:orderRepository.findAll())
 		{
 			orderDTOReturn.add(entityToDTO(o));
 		}
-		
 		return  orderDTOReturn;
 	}
 

@@ -15,74 +15,54 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.onlinepizza.dto.OrderDTO;
+import com.cg.onlinepizza.exceptions.DatabaseException;
+import com.cg.onlinepizza.exceptions.OrderIdNotFoundException;
 import com.cg.onlinepizza.service.OrderService;
 
 @RestController
 @RequestMapping("/order")
 public class OrderController {
-	
+
 	@Autowired
 	OrderService orderService;
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PutMapping("/update")
-	public ResponseEntity<List<OrderDTO>> updateCoupon(
+	public ResponseEntity<List<OrderDTO>> updateOrder(
 			@RequestBody OrderDTO order){
 		List<OrderDTO> orders = orderService.updateOrder(order);
-		if(orders.isEmpty())
-		{
-			return new ResponseEntity("Sorry! Orders not available!",HttpStatus.NOT_FOUND);
-		}
 		return new ResponseEntity<List<OrderDTO>>(orders,HttpStatus.OK);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/insert")
-	public ResponseEntity<List<OrderDTO>> insertCustomer(
-			@RequestBody OrderDTO order){
+	public ResponseEntity<List<OrderDTO>> insertOrder(
+			@RequestBody OrderDTO order) throws DatabaseException{
 		List<OrderDTO> orders = orderService.saveOrder(order);
-		if(orders.isEmpty())
-		{
-			return new ResponseEntity("Sorry! Order could not be inserted!",HttpStatus.BAD_REQUEST);
-		}
 		return new ResponseEntity<List<OrderDTO>>(orders,HttpStatus.OK);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@DeleteMapping("/delete/{orderId}")
-	public ResponseEntity<List<OrderDTO>> deleteCustomer(
+	public ResponseEntity<List<OrderDTO>> deleteOrder(
 			@PathVariable("orderId")int orderId){
 		List<OrderDTO> orders= orderService.deleteOrder(orderId);
-		if(orders.isEmpty() || orders==null) {
-			return new ResponseEntity("Sorry! OrderId not available!", 
-					HttpStatus.NOT_FOUND);
-		}
-
 		return new ResponseEntity<List<OrderDTO>>(orders, HttpStatus.OK);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GetMapping("/find/{orderId}")
-	public ResponseEntity<OrderDTO> findCustomer(
-			@PathVariable("orderId")int orderId){
-		OrderDTO order= orderService.findCustomer(orderId);
-		if(order==null) {
-			return new ResponseEntity("Sorry! Order not found!", 
-					HttpStatus.NOT_FOUND);
-		}
-
+	public ResponseEntity<OrderDTO> findOrder(
+			@PathVariable("orderId")int orderId) throws OrderIdNotFoundException{
+		OrderDTO order= orderService.findOrder(orderId);
 		return new ResponseEntity<OrderDTO>(order, HttpStatus.OK);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GetMapping("/findAll")
-	public ResponseEntity<List<OrderDTO>> getAllCustomers(){
+	public ResponseEntity<List<OrderDTO>> getAllOrders(){
 		List<OrderDTO> orders= orderService.getAllOrders();
-		if(orders.isEmpty()) {
-			return new ResponseEntity("Sorry! Orders not found!", 
-					HttpStatus.NOT_FOUND);
+		if(!orders.isEmpty()) {
+			return new ResponseEntity<List<OrderDTO>>(orders, HttpStatus.OK);
 		}
-
-		return new ResponseEntity<List<OrderDTO>>(orders, HttpStatus.OK);
+		return new ResponseEntity("Sorry! Orders not found!", 
+				HttpStatus.NOT_FOUND);
 	}
+
 }

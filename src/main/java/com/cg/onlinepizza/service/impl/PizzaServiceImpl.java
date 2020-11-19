@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cg.onlinepizza.dto.PizzaDTO;
+import com.cg.onlinepizza.exceptions.PizzaAlreadyExistsException;
+import com.cg.onlinepizza.exceptions.PizzaIdNotFoundException;
 import com.cg.onlinepizza.model.Pizza;
 import com.cg.onlinepizza.repository.PizzaRepository;
 import com.cg.onlinepizza.service.PizzaService;
@@ -58,9 +60,25 @@ public class PizzaServiceImpl implements PizzaService{
 	}
 
 	@Override
-	public List<PizzaDTO> deletePizza(Integer pizzaId) {
-		pizzaRepository.deleteById(pizzaId);
+	public List<PizzaDTO> deletePizza(Integer pizzaId) throws PizzaIdNotFoundException{
+		
 		List<PizzaDTO> pizzaDTOReturn = new ArrayList<>();
+		
+		Optional<Pizza>checkPizza=pizzaRepository.findById(pizzaId);
+		if(!checkPizza.isPresent())
+		{
+			throw new PizzaIdNotFoundException("Pizza with id " + pizzaId + " not Found");
+		}
+		
+		pizzaRepository.deleteById(pizzaId);
+		
+		List<Pizza>PizzaEntityList=pizzaRepository.findAll();
+		
+		if(PizzaEntityList==null || PizzaEntityList.isEmpty())
+		{
+			throw new PizzaIdNotFoundException("No Pizzas Found");
+		}
+			
 		for(Pizza p:pizzaRepository.findAll())
 		{
 			pizzaDTOReturn.add(entityToDTO(p));
@@ -69,10 +87,14 @@ public class PizzaServiceImpl implements PizzaService{
 	}
 
 	@Override
-	public List<PizzaDTO> savePizza(PizzaDTO pizzaDTO) {
+	public List<PizzaDTO> savePizza(PizzaDTO pizzaDTO) throws PizzaAlreadyExistsException{
 		Pizza pizza = new Pizza();
 		pizza = DTOToEntity(pizzaDTO);
-		
+		Optional<Pizza>returnPizza=pizzaRepository.findById(pizza.getPizzaId());
+		if(returnPizza.isPresent())
+		{
+			throw new PizzaAlreadyExistsException("Pizza can not be added");
+		}
 		pizzaRepository.saveAndFlush(pizza);
 		
 		List<PizzaDTO> pizzaDTOReturn = new ArrayList<>();
@@ -84,9 +106,14 @@ public class PizzaServiceImpl implements PizzaService{
 	}
 
 	@Override
-	public List<PizzaDTO> updatePizza(PizzaDTO pizzaDTO) {
+	public List<PizzaDTO> updatePizza(PizzaDTO pizzaDTO) throws PizzaIdNotFoundException{
 		Pizza pizza = new Pizza();
 		pizza = DTOToEntity(pizzaDTO);
+		Optional<Pizza>checkPizza=pizzaRepository.findById(pizza.getPizzaId());
+		if(!checkPizza.isPresent())
+		{
+			throw new PizzaIdNotFoundException("Pizza with id " + pizza.getPizzaId()+ "not Found");
+		}
 		
 		pizzaRepository.save(pizza);
 		
@@ -99,9 +126,13 @@ public class PizzaServiceImpl implements PizzaService{
 		return  pizzaDTOReturn;
 	}
 	@Override
-	public PizzaDTO findPizza(Integer pizzaId) {
-		Optional<Pizza>pizza=pizzaRepository.findById(pizzaId);
-		return entityToDTO(pizza.get());
+	public PizzaDTO findPizza(Integer pizzaId) throws PizzaIdNotFoundException{
+		Optional<Pizza>checkPizza=pizzaRepository.findById(pizzaId);
+		if(!checkPizza.isPresent())
+		{
+			throw new PizzaIdNotFoundException("Pizza with id " + pizzaId+ "not Found");
+		}
+		return entityToDTO(checkPizza.get());
 	}
 
 }

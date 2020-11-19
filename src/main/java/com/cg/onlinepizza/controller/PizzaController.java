@@ -23,56 +23,31 @@ public class PizzaController {
 	@Autowired
 	private PizzaService pizzaService;
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PutMapping("/update")
 	public ResponseEntity<List<PizzaDTO>> updatePizza(
 			@RequestBody PizzaDTO pizza){
 		List<PizzaDTO> pizzas= pizzaService.updatePizza(pizza);
-		if(pizzas.isEmpty())
-		{
-			return new ResponseEntity("Sorry! Pizza not available!", HttpStatus.NOT_FOUND);
-		}
-		
 		return new ResponseEntity<List<PizzaDTO>>(pizzas, HttpStatus.OK);
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/insert")
-	public ResponseEntity<List<PizzaDTO>> insertOrder(
+	public ResponseEntity<List<PizzaDTO>> insertPizza(
 			@RequestBody PizzaDTO pizza){
 		List<PizzaDTO> pizzas= pizzaService.savePizza(pizza);
-		if(pizzas.isEmpty())
-		{
-			return new ResponseEntity("Sorry! Pizza could not be inserted!", 
-					HttpStatus.BAD_REQUEST);
-		}
-		
 		return new ResponseEntity<List<PizzaDTO>>(pizzas, HttpStatus.OK);
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@DeleteMapping("/delete/{pizzaId}")
 	public ResponseEntity<List<PizzaDTO>> deletePizza(
 			@PathVariable("pizzaId")Integer pizzaId){
 		List<PizzaDTO> pizzas= pizzaService.deletePizza(pizzaId);
-		if(pizzas.isEmpty() || pizzas==null) {
-			return new ResponseEntity("Sorry! PizzaId not available!", 
-					HttpStatus.NOT_FOUND);
-		}
-		
 		return new ResponseEntity<List<PizzaDTO>>(pizzas, HttpStatus.OK);
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GetMapping("/find/{pizzaId}")
 	public ResponseEntity<PizzaDTO> findPizza(
 			@PathVariable("pizzaId")Integer pizzaId){
 		PizzaDTO pizza= pizzaService.findPizza(pizzaId);
-		if(pizza==null) {
-			return new ResponseEntity("Sorry! Pizza not found!", 
-					HttpStatus.NOT_FOUND);
-		}
-		
 		return new ResponseEntity<PizzaDTO>(pizza, HttpStatus.OK);
 	}
 

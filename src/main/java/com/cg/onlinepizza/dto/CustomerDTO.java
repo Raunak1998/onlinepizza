@@ -3,6 +3,9 @@ package com.cg.onlinepizza.dto;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 public class CustomerDTO implements Serializable{
 
 	/**
@@ -12,10 +15,14 @@ public class CustomerDTO implements Serializable{
 
 	private int customerId;
 
+	@NotNull
+	@Pattern(regexp = "[a-zA-Z]")
 	private String firstName;
 	
+	@Pattern(regexp = "[a-zA-Z]")
 	private String lastName;
 
+	
 	private Long customerMobile;
 
 	private String customerEmail;

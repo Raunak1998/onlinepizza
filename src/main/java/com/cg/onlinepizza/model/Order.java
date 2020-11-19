@@ -14,6 +14,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Entity
 @Table(name = "order_details")
@@ -29,20 +32,25 @@ public class Order implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int orderId;
 	
+	@FutureOrPresent
 	@Column(name = "order_date")
 	private LocalDate orderDate;
 	
+	@Positive
 	@Column(name = "total_cost")
 	private double totalCost;
 	
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
 	
+	@NotNull
 	@ManyToMany
 	@JoinTable(name = "pizza_order_details", joinColumns = {@JoinColumn(name = "order_id")}, inverseJoinColumns = {@JoinColumn(name = "pizza_id")})
 	private Set<Pizza> pizzas;
 	
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "coupon_name")
 	private Coupon coupon; 
