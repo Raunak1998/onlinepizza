@@ -2,6 +2,8 @@ package com.cg.onlinepizza.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,14 +30,14 @@ public class OrderController {
 
 	@PutMapping("/update")
 	public ResponseEntity<List<OrderDTO>> updateOrder(
-			@RequestBody OrderDTO order){
+			@Valid @RequestBody OrderDTO order){
 		List<OrderDTO> orders = orderService.updateOrder(order);
 		return new ResponseEntity<List<OrderDTO>>(orders,HttpStatus.OK);
 	}
 
 	@PostMapping("/insert")
 	public ResponseEntity<List<OrderDTO>> insertOrder(
-			@RequestBody OrderDTO order) throws DatabaseException{
+			@Valid @RequestBody OrderDTO order) throws DatabaseException{
 		List<OrderDTO> orders = orderService.saveOrder(order);
 		return new ResponseEntity<List<OrderDTO>>(orders,HttpStatus.OK);
 	}

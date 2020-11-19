@@ -3,8 +3,10 @@ package com.cg.onlinepizza.dto;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class CustomerDTO implements Serializable{
 
@@ -12,27 +14,32 @@ public class CustomerDTO implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	private int customerId;
-
+    
 	@NotNull
-	@Pattern(regexp = "[a-zA-Z]")
+	@Size(min = 2, message = "First Name should have atleast 2 characters")
 	private String firstName;
 	
-	@Pattern(regexp = "[a-zA-Z]")
 	private String lastName;
-
-	
+    
+	@NotNull
+	//@Size(min = 10, max = 10)
 	private Long customerMobile;
-
+    
+	@NotBlank
+	@Email
 	private String customerEmail;
-
+    
+	@NotBlank
 	private String customerAddress;
-
+    
+	@NotNull
 	private String userName;
-
+    
+	@NotNull
 	private String password;
-
+	
 	private Set<OrderDTO> order;
 
 

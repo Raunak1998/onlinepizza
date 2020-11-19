@@ -2,7 +2,7 @@ package com.cg.onlinepizza.dto;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -13,16 +13,17 @@ public class CouponDTO implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@NotNull
+	@NotBlank(message = "CouponName is Mandatory")
 	private String couponName;
 
-	@NotNull
+	@NotBlank(message = "CouponType is Mandatory")
 	@Pattern(regexp = "^\\d{2}+%+\\s+(OFF)+$")
 	private String couponType;
 
-	@NotNull
-	@Size(min = 5, max = 100)
+	@Size(max=200)
+    @NotBlank(message = "CouponDescription is Mandatory")
 	private String couponDescription;
+	
 
 	public CouponDTO() {
 		super();

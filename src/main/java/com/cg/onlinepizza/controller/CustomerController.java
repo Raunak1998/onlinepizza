@@ -3,6 +3,8 @@ package com.cg.onlinepizza.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.onlinepizza.dto.CustomerDTO;
+import com.cg.onlinepizza.exceptions.CustomerAlreadyExistsException;
+import com.cg.onlinepizza.exceptions.CustomerNotFoundException;
+import com.cg.onlinepizza.exceptions.CustomersNotPresentException;
 import com.cg.onlinepizza.service.CustomerService;
 
 
@@ -26,65 +31,37 @@ public class CustomerController {
 	@Autowired
 	private CustomerService customerService;
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PutMapping("/update")
 	public ResponseEntity<List<CustomerDTO>> updateCoupon(
-			@RequestBody CustomerDTO customerDTO){
+			@Valid @RequestBody CustomerDTO customerDTO)throws CustomerNotFoundException{
 		List<CustomerDTO> customers = customerService.updateCustomer(customerDTO);
-		if(customers.isEmpty())
-		{
-			return new ResponseEntity("Sorry! Customers not available!",HttpStatus.NOT_FOUND);
-		}
 		return new ResponseEntity<List<CustomerDTO>>(customers,HttpStatus.OK);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/insert")
 	public ResponseEntity<List<CustomerDTO>> insertCustomer(
-			@RequestBody CustomerDTO customer){
+			@Valid @RequestBody CustomerDTO customer)throws CustomerAlreadyExistsException{
 		List<CustomerDTO> customers = customerService.saveCustomer(customer);
-		if(customers.isEmpty())
-		{
-			return new ResponseEntity("Sorry! Customer could not be inserted!",HttpStatus.BAD_REQUEST);
-		}
 		return new ResponseEntity<List<CustomerDTO>>(customers,HttpStatus.OK);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@DeleteMapping("/delete/{customerId}")
 	public ResponseEntity<List<CustomerDTO>> deleteCustomer(
-			@PathVariable("customerId")int customerId){
+			@PathVariable("customerId")int customerId)throws CustomerNotFoundException{
 		List<CustomerDTO> customers= customerService.deleteCustomer(customerId);
-		if(customers.isEmpty() || customers==null) {
-			return new ResponseEntity("Sorry! CustomerId not available!", 
-					HttpStatus.NOT_FOUND);
-		}
-
 		return new ResponseEntity<List<CustomerDTO>>(customers, HttpStatus.OK);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GetMapping("/find/{customerId}")
-	public ResponseEntity<CustomerDTO> findCustomer(
-			@PathVariable("customerId")int customerId){
+	public ResponseEntity<CustomerDTO> findCustomer (
+			@PathVariable("customerId")int customerId)throws CustomerNotFoundException{
 		CustomerDTO customer= customerService.findCustomer(customerId);
-		if(customer==null) {
-			return new ResponseEntity("Sorry! CustomerId not found!", 
-					HttpStatus.NOT_FOUND);
-		}
-
 		return new ResponseEntity<CustomerDTO>(customer, HttpStatus.OK);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GetMapping("/findAll")
-	public ResponseEntity<List<CustomerDTO>> getAllCustomers(){
+	public ResponseEntity<List<CustomerDTO>> getAllCustomers() throws CustomersNotPresentException{
 		List<CustomerDTO> customers= customerService.getAllCustomers();
-		if(customers.isEmpty()) {
-			return new ResponseEntity("Sorry! Customers not found!", 
-					HttpStatus.NOT_FOUND);
-		}
-
 		return new ResponseEntity<List<CustomerDTO>>(customers, HttpStatus.OK);
 	}
 }
