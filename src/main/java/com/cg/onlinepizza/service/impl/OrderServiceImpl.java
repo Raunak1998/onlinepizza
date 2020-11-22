@@ -191,7 +191,8 @@ public class OrderServiceImpl implements OrderService {
 	public List<OrderDTO> saveOrder(OrderDTO orderDTO) throws DatabaseException{
 		
 		log.info("Service Layer - Entry - Save Orders");
-		
+		if(orderDTO==null)
+			return null;
 		Order order = new Order();
 		order = DTOToEntity(orderDTO);
 		Order orderCheck = new Order();
@@ -214,7 +215,8 @@ public class OrderServiceImpl implements OrderService {
 	public List<OrderDTO> updateOrder(OrderDTO orderDTO) throws OrderIdNotFoundException{
 		
 		log.info("Service Layer - Entry - Update Orders");
-		
+		if(orderDTO == null)
+			return null;
 		Optional<Order>order = orderRepository.findById(orderDTO.getOrderId());
 		if(!order.isPresent())
 		{

@@ -27,10 +27,9 @@ public class PizzaDTO implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 	
-	public PizzaDTO(int pizzaId, String pizzaType, String pizzaSize, String pizzaName, String pizzaDescription,
+	public PizzaDTO(String pizzaType, String pizzaSize, String pizzaName, String pizzaDescription,
 			double pizzaCost) {
 		super();
-		this.pizzaId = pizzaId;
 		this.pizzaType = pizzaType;
 		this.pizzaSize = pizzaSize;
 		this.pizzaName = pizzaName;
@@ -74,4 +73,30 @@ public class PizzaDTO implements Serializable{
 	public void setPizzaCost(double pizzaCost) {
 		this.pizzaCost = pizzaCost;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + pizzaId;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PizzaDTO other = (PizzaDTO) obj;
+		if (pizzaId != other.pizzaId)
+			return false;
+		return true;
+	}
+
+	
+	
+	
 }

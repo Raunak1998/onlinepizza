@@ -57,10 +57,9 @@ public class Customer implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Customer(int customerId, String firstName, String lastName, Long customerMobile, String customerEmail,
+	public Customer(String firstName, String lastName, Long customerMobile, String customerEmail,
 			String customerAddress, String userName, String password, Set<Order> order) {
 		super();
-		this.customerId = customerId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.customerMobile = customerMobile;

@@ -48,10 +48,9 @@ public class CustomerDTO implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public CustomerDTO(int customerId, String firstName, String lastName, Long customerMobile, String customerEmail,
+	public CustomerDTO(String firstName, String lastName, Long customerMobile, String customerEmail,
 			String customerAddress, String userName, String password, Set<OrderDTO> order) {
 		super();
-		this.customerId = customerId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.customerMobile = customerMobile;

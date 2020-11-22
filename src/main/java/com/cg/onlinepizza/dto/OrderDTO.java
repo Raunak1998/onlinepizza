@@ -41,10 +41,9 @@ public class OrderDTO implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public OrderDTO(int orderId, LocalDate orderDate, double totalCost, CustomerDTO customer, Set<PizzaDTO> pizzas,
+	public OrderDTO(LocalDate orderDate, double totalCost, CustomerDTO customer, Set<PizzaDTO> pizzas,
 			CouponDTO coupon) {
 		super();
-		this.orderId = orderId;
 		this.orderDate = orderDate;
 		this.totalCost = totalCost;
 		this.customer = customer;
@@ -109,14 +108,7 @@ public class OrderDTO implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((coupon == null) ? 0 : coupon.hashCode());
-		result = prime * result + ((customer == null) ? 0 : customer.hashCode());
-		result = prime * result + ((orderDate == null) ? 0 : orderDate.hashCode());
 		result = prime * result + orderId;
-		result = prime * result + ((pizzas == null) ? 0 : pizzas.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(totalCost);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
@@ -129,29 +121,7 @@ public class OrderDTO implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		OrderDTO other = (OrderDTO) obj;
-		if (coupon == null) {
-			if (other.coupon != null)
-				return false;
-		} else if (!coupon.equals(other.coupon))
-			return false;
-		if (customer == null) {
-			if (other.customer != null)
-				return false;
-		} else if (!customer.equals(other.customer))
-			return false;
-		if (orderDate == null) {
-			if (other.orderDate != null)
-				return false;
-		} else if (!orderDate.equals(other.orderDate))
-			return false;
 		if (orderId != other.orderId)
-			return false;
-		if (pizzas == null) {
-			if (other.pizzas != null)
-				return false;
-		} else if (!pizzas.equals(other.pizzas))
-			return false;
-		if (Double.doubleToLongBits(totalCost) != Double.doubleToLongBits(other.totalCost))
 			return false;
 		return true;
 	}

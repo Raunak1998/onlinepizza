@@ -52,9 +52,8 @@ public class Order implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public Order(int orderId, LocalDate orderDate, double totalCost, Customer customer, Set<Pizza> pizzas, Coupon coupon) {
+	public Order(LocalDate orderDate, double totalCost, Customer customer, Set<Pizza> pizzas, Coupon coupon) {
 		super();
-		this.orderId = orderId;
 		this.orderDate = orderDate;
 		this.totalCost = totalCost;
 		this.customer = customer;

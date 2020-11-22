@@ -42,6 +42,8 @@ public class Pizza implements Serializable{
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+
 	public Pizza(String pizzaType, String pizzaSize, String pizzaName, String pizzaDescription,
 			double pizzaCost) {
 		super();
@@ -51,6 +53,7 @@ public class Pizza implements Serializable{
 		this.pizzaDescription = pizzaDescription;
 		this.pizzaCost = pizzaCost;
 	}
+
 
 	public int getPizzaId() {
 		return pizzaId; 
