@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,8 @@ import com.cg.onlinepizza.service.OrderService;
 @Service
 public class OrderServiceImpl implements OrderService {
 
+	static Logger log = Logger.getLogger(OrderServiceImpl.class.getName());
+	
 	@Autowired
 	private OrderRepository orderRepository;
 
@@ -88,10 +91,8 @@ public class OrderServiceImpl implements OrderService {
 		customer.setCustomerAddress(orderDTO.getCustomer().getCustomerAddress());
 		customer.setUserName(orderDTO.getCustomer().getUserName());
 		customer.setPassword(orderDTO.getCustomer().getPassword());
-		customer.setCustomerEmail(orderDTO.getCustomer().getCustomerEmail());
-		Set<Order> prev = new HashSet<>();
-		prev.add(order);
-		customer.setOrder(prev);
+		customer.setCustomerEmail(orderDTO.getCustomer().getCustomerEmail());	
+		customer.setOrder(null);
 
 		order.setCustomer(customer);
 
@@ -124,6 +125,9 @@ public class OrderServiceImpl implements OrderService {
 	@SuppressWarnings("unused")
 	@Override
 	public List<OrderDTO> getAllOrders() throws OrderIdNotFoundException{
+		
+		log.info("Service Layer - Entry - Get All Orders");
+		
 		List<OrderDTO> orderDTOReturn = new ArrayList<>();
 		for(Order o:orderRepository.findAll())
 		{
@@ -132,44 +136,69 @@ public class OrderServiceImpl implements OrderService {
 		if(orderDTOReturn==null)
 			throw new OrderIdNotFoundException("Orders not present in the database");
 
+		log.info("Service Layer - Exit - Get All Orders");
 		return  orderDTOReturn;
 	}
 
 	@Override
 	public OrderDTO findOrder(Integer orderId) throws OrderIdNotFoundException {
+		
+		log.info("Service Layer - Entry - Get Orders By Id");
+		
+		if(orderId == null)
+			return null;
+		
 		Optional<Order>order = orderRepository.findById(orderId);
 		if(!order.isPresent())
 		{
 			throw new OrderIdNotFoundException("OrderId not present in the database!");
 		}
+		
+		log.info("Service Layer - Exit - Get Orders By Id");
+		
 		return entityToDTO(order.get());
 	}
 
 	@Override
 	public List<OrderDTO> deleteOrder(Integer orderId) throws OrderIdNotFoundException{
+		
+		log.info("Service Layer - Entry - Delete Order");
+		
+		if(orderId == null)
+			return null;
+		
 		Optional<Order>order = orderRepository.findById(orderId);
 		if(!order.isPresent())
 		{
 			throw new OrderIdNotFoundException("OrderId not present in the database!");
-		}	
+		}
+		
+		log.warn("WARN: delete orders Started");
+		
 		orderRepository.deleteById(orderId);
 		List<OrderDTO> orderDTOReturn = new ArrayList<>();
 		for(Order o:orderRepository.findAll())
 		{
 			orderDTOReturn.add(entityToDTO(o));
 		}
+		
+		log.info("Service Layer - Exit - Delete Orders");
+		
 		return  orderDTOReturn;
 	}
 
 	@Override
 	public List<OrderDTO> saveOrder(OrderDTO orderDTO) throws DatabaseException{
+		
+		log.info("Service Layer - Entry - Save Orders");
+		
 		Order order = new Order();
 		order = DTOToEntity(orderDTO);
 		Order orderCheck = new Order();
 		orderCheck = orderRepository.saveAndFlush(order);
 		if(orderCheck == null)
 		{
-			throw new DatabaseException("Order canned be added!");
+			throw new DatabaseException("Order cannot be added!");
 		}
 		List<OrderDTO> orderDTOReturn = new ArrayList<>();
 		for(Order o:orderRepository.findAll())
@@ -177,11 +206,15 @@ public class OrderServiceImpl implements OrderService {
 			orderDTOReturn.add(entityToDTO(o));
 		}
 
+		log.info("Service Layer - Exit - Save Orders");
 		return  orderDTOReturn;
 	}
 
 	@Override
 	public List<OrderDTO> updateOrder(OrderDTO orderDTO) throws OrderIdNotFoundException{
+		
+		log.info("Service Layer - Entry - Update Orders");
+		
 		Optional<Order>order = orderRepository.findById(orderDTO.getOrderId());
 		if(!order.isPresent())
 		{
@@ -195,6 +228,9 @@ public class OrderServiceImpl implements OrderService {
 		{
 			orderDTOReturn.add(entityToDTO(o));
 		}
+		
+		log.info("Service Layer - Exit - Update Orders");
+		
 		return  orderDTOReturn;
 	}
 

@@ -52,8 +52,6 @@ public class OrderDTO implements Serializable{
 		this.coupon = coupon;
 	}
 
-	
-
 	public int getOrderId() {
 		return orderId;
 	}

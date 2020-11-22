@@ -22,6 +22,21 @@ public class PizzaDTO implements Serializable{
 
 	private double pizzaCost;
 
+	public PizzaDTO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	public PizzaDTO(int pizzaId, String pizzaType, String pizzaSize, String pizzaName, String pizzaDescription,
+			double pizzaCost) {
+		super();
+		this.pizzaId = pizzaId;
+		this.pizzaType = pizzaType;
+		this.pizzaSize = pizzaSize;
+		this.pizzaName = pizzaName;
+		this.pizzaDescription = pizzaDescription;
+		this.pizzaCost = pizzaCost;
+	}
 
 	public int getPizzaId() {
 		return pizzaId; 

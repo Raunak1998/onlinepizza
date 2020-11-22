@@ -3,6 +3,8 @@ package com.cg.onlinepizza.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ import com.cg.onlinepizza.service.PizzaService;
 @Service
 public class PizzaServiceImpl implements PizzaService{
 
+	static Logger log = Logger.getLogger(PizzaServiceImpl.class);
+	
 	@Autowired
 	private PizzaRepository pizzaRepository;
 	
