@@ -65,7 +65,8 @@ public class PizzaServiceImpl implements PizzaService{
 
 	@Override
 	public List<PizzaDTO> deletePizza(Integer pizzaId) throws PizzaIdNotFoundException{
-		
+		if(pizzaId == null)
+			return null;
 		List<PizzaDTO> pizzaDTOReturn = new ArrayList<>();
 		
 		Optional<Pizza>checkPizza=pizzaRepository.findById(pizzaId);
@@ -92,6 +93,8 @@ public class PizzaServiceImpl implements PizzaService{
 
 	@Override
 	public List<PizzaDTO> savePizza(PizzaDTO pizzaDTO) throws PizzaAlreadyExistsException{
+		if(pizzaDTO == null)
+			return null;
 		Pizza pizza = new Pizza();
 		pizza = DTOToEntity(pizzaDTO);
 		Optional<Pizza>returnPizza=pizzaRepository.findById(pizza.getPizzaId());
@@ -111,6 +114,8 @@ public class PizzaServiceImpl implements PizzaService{
 
 	@Override
 	public List<PizzaDTO> updatePizza(PizzaDTO pizzaDTO) throws PizzaIdNotFoundException{
+		if(pizzaDTO == null)
+			return null;
 		Pizza pizza = new Pizza();
 		pizza = DTOToEntity(pizzaDTO);
 		Optional<Pizza>checkPizza=pizzaRepository.findById(pizza.getPizzaId());
@@ -131,10 +136,12 @@ public class PizzaServiceImpl implements PizzaService{
 	}
 	@Override
 	public PizzaDTO findPizza(Integer pizzaId) throws PizzaIdNotFoundException{
+		if(pizzaId == null)
+			return null;
 		Optional<Pizza>checkPizza=pizzaRepository.findById(pizzaId);
 		if(!checkPizza.isPresent())
 		{
-			throw new PizzaIdNotFoundException("Pizza with id " + pizzaId+ "not Found");
+			throw new PizzaIdNotFoundException("Pizza with id " + pizzaId+ " not Found");
 		}
 		return entityToDTO(checkPizza.get());
 	}

@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class CustomerDTO implements Serializable{
@@ -21,23 +22,25 @@ public class CustomerDTO implements Serializable{
 	@Size(min = 2, message = "First Name should have atleast 2 characters")
 	private String firstName;
 	
+	@NotNull(message = "Last name should not be null")
 	private String lastName;
     
-	@NotNull
-	//@Size(min = 10, max = 10)
+	@NotNull(message = "Phone number should be 10 characters long")
+	@Pattern(regexp = "(0/91)?[7-9][0-9]{9}")
 	private Long customerMobile;
     
-	@NotBlank
+	@NotBlank(message = "Email cannot be blank")
 	@Email
 	private String customerEmail;
     
-	@NotBlank
+	@NotBlank(message = "Address cannot be blank")
 	private String customerAddress;
     
-	@NotNull
+	@NotNull(message = "Username cannot be blank")
 	private String userName;
     
-	@NotNull
+	@NotNull(message = "Passord should contain min of 3 chars and max of 10 chars")
+	@Size(min=3, max=10)
 	private String password;
 	
 	private Set<OrderDTO> order;

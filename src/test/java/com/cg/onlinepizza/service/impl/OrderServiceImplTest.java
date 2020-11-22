@@ -132,12 +132,9 @@ public class OrderServiceImplTest {
 		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
 		Order order = new Order(LocalDate.now(), 1500, customer, pizzas , coupon);
 		order.setOrderId(1);
-
-		Mockito.when(orderRepository.findById(1)).thenReturn(Optional.of(order));
-		order.setOrderId(2);
-
-		Mockito.when(orderRepository.save(order)).thenReturn(order);
-
+		Mockito.when(orderRepository.findById(order.getOrderId())).thenReturn(Optional.of(order));
+//		order.setOrderId(2);
+        Mockito.when(orderRepository.save(order)).thenReturn(order);
 		Mockito.when(orderRepository.findAll()).thenReturn(Stream.of(order).collect(Collectors.toList()));
 
 		List<OrderDTO> actual = orderService.updateOrder(OrderServiceImpl.entityToDTO(order));

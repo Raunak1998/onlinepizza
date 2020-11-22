@@ -2,6 +2,9 @@ package com.cg.onlinepizza.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class PizzaDTO implements Serializable{
 
 	/**
@@ -9,17 +12,22 @@ public class PizzaDTO implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@NotNull(message = "PizzaId cannot be null")
 	private int pizzaId;
 
+	@NotBlank(message = "PizzaType cannot be null")
 	private String pizzaType;
 	
 	// Small,Medium,Large
+	@NotBlank(message = "Pizza size cannot be blank. Should be among Small,Medium and Large")
 	private String pizzaSize;
 
+	@NotNull(message = "Pizza name cannot be null")
 	private String pizzaName;
 
 	private String pizzaDescription;
 
+	@NotNull(message = "Pizza Cost cannot be null")
 	private double pizzaCost;
 
 	public PizzaDTO() {

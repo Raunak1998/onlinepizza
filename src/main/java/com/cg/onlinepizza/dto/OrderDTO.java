@@ -15,24 +15,23 @@ public class OrderDTO implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@NotNull
+	@NotNull(message = "OrderId cannot be null")
 	private int orderId;
 	
-	@NotNull
+	@NotNull(message = "Order date cannot be blank. it should be present or future date")
 	@FutureOrPresent
 	private LocalDate orderDate;
 	
-	@NotNull
+	@NotNull(message = "Total Cost should be present")
 	@Positive
 	private double totalCost;
 	
-	@NotNull
+	@NotNull(message = "Customer should be assigned cannot be null")
 	private CustomerDTO customer;
 	
-	@NotNull
+	@NotNull(message = "Pizzas should be present in the order to place it.")
 	private Set<PizzaDTO> pizzas;
 
-	@NotNull
 	private CouponDTO coupon; 
 
 

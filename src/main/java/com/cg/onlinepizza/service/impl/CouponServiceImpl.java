@@ -58,6 +58,9 @@ public class CouponServiceImpl implements CouponService{
 
 	@Override
 	public List<CouponDTO> deleteCoupon(String couponName) {
+		if(couponName==null) {
+			return null;
+		}
 		log.info("Service Layer - Entry - delete Coupons");		
 		List<CouponDTO> couponDTOReturn = new ArrayList<>();
 		Optional<Coupon>checkCoupon=couponRepository.findById(couponName);
@@ -87,14 +90,17 @@ public class CouponServiceImpl implements CouponService{
 
 	@Override
 	public List<CouponDTO> saveCoupon(CouponDTO couponDTO) {
+		if(couponDTO==null) {
+			return null;
+		}
 		log.info("Service Layer - Entry - save Coupons");	
 		Coupon coupon = new Coupon();
 		coupon = DTOToEntity(couponDTO);
 		
-		couponRepository.saveAndFlush(coupon);
+	//	couponRepository.saveAndFlush(coupon);
 		
 		Optional<Coupon>returnCoupon=couponRepository.findById(coupon.getCouponName());
-		if(!returnCoupon.isPresent())
+		if(returnCoupon.isPresent())
 		{
 			log.warn("WARN:  save coupons Started");
 			throw new CouponAlreadyExistsException("Coupon cannot be added");
@@ -106,12 +112,15 @@ public class CouponServiceImpl implements CouponService{
 		{
 			couponDTOReturn.add(entityToDTO(c));
 		}
-		log.info("Service Layer - Exit - delete Coupons");
+		log.info("Service Layer - Exit - save Coupons");
 		return couponDTOReturn;
 	}
 
 	@Override
 	public List<CouponDTO> updateCoupon(CouponDTO couponDTO) {
+		if(couponDTO==null) {
+			return null;
+		}
 		log.info("Service Layer - Entry - update Coupons");
 		Coupon coupon = new Coupon();
 		coupon = DTOToEntity(couponDTO);
@@ -130,6 +139,7 @@ public class CouponServiceImpl implements CouponService{
 		{
 			couponDTOReturn.add(entityToDTO(c));
 		}
+		
 		log.info("Service Layer - Exit - update Coupons");
 		return  couponDTOReturn;
 	}

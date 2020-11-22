@@ -24,6 +24,7 @@ import com.cg.onlinepizza.service.CustomerService;
 public class CustomerServiceImpl implements CustomerService{
 
 	static Logger log = Logger.getLogger(CustomerServiceImpl.class.getName());
+	
 	@Autowired
 	private CustomerRepository customerRepository;
 
@@ -93,6 +94,10 @@ public class CustomerServiceImpl implements CustomerService{
 	@Override
 	public List<CustomerDTO> deleteCustomer(Integer customerId) throws CustomerNotFoundException{
 		
+		if(customerId == null)
+		{
+			return null;
+		}
 		log.info("Service Layer - Entry - delete Customers");
 		
 		Optional<Customer> checking = customerRepository.findById(customerId);
@@ -116,6 +121,11 @@ public class CustomerServiceImpl implements CustomerService{
 
 	@Override
 	public List<CustomerDTO> saveCustomer(CustomerDTO customerDTO) throws CustomerAlreadyExistsException {
+		
+		if(customerDTO == null)
+		{
+			return null;
+		}
 		
 		log.info("Service Layer - Entry - save Customers");
 		
@@ -142,6 +152,11 @@ public class CustomerServiceImpl implements CustomerService{
 
 	@Override
 	public List<CustomerDTO> updateCustomer(CustomerDTO customerDTO) throws CustomerNotFoundException{
+		
+		if(customerDTO == null)
+		{
+			return null;
+		}
 		
 		log.info("Service Layer - Entry - update Customers");
 		
