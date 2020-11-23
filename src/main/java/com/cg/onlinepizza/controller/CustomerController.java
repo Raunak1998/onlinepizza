@@ -25,7 +25,7 @@ import com.cg.onlinepizza.service.CustomerService;
 
 
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/onlinepizza/customer")
 public class CustomerController {
 
 	@Autowired

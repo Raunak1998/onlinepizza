@@ -147,8 +147,6 @@ public class Customer implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + customerId;
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		return result;
 	}
 
@@ -163,18 +161,10 @@ public class Customer implements Serializable {
 		Customer other = (Customer) obj;
 		if (customerId != other.customerId)
 			return false;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
 		return true;
 	}
+
+	
 
 
 }

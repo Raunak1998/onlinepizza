@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +34,7 @@ public class CouponServiceImplTest {
 	CouponRepository couponRepository;
 	
 	@Test
-	public void getAllCouponsPresent()
+	public void getAllCouponsPresentTest()
 	{
 		
 		CouponDTO coupon1 = new CouponDTO("GET50", "50% OFF", "On Orders above 500Rs");
@@ -45,7 +46,7 @@ public class CouponServiceImplTest {
 	}
 
 	@Test
-	public void getAllCouponsNotPresent()
+	public void getAllCouponsNotPresentTest()
 	{
 		Mockito.when(couponRepository.findAll()).thenThrow(new CouponNotFoundException("No coupons present in the database"));
 
@@ -54,7 +55,7 @@ public class CouponServiceImplTest {
 	}
 	
 	@Test
-	public void saveCouponPresent()  {
+	public void saveCouponPresentTest()  {
 		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
 		Mockito.when(couponRepository.saveAndFlush(coupon)).thenReturn(coupon);  
 		Mockito.when(couponRepository.findAll()).thenReturn(Stream.of(coupon).collect(Collectors.toList()));
@@ -62,7 +63,7 @@ public class CouponServiceImplTest {
 		assertEquals(1,actual.size());
 	}
 	@Test
-	public void updateCouponPresent() throws CouponNotFoundException {
+	public void updateCouponPresentTest() throws CouponNotFoundException {
 		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
 		Mockito.when(couponRepository.findById("GET50")).thenReturn(Optional.of(coupon));
 		
@@ -72,20 +73,23 @@ public class CouponServiceImplTest {
 		List<CouponDTO> actual = couponService.updateCoupon(CouponServiceImpl.entityToDTO(coupon));
 		assertEquals(1,actual.size());
 	}
-	/*
-	@Test
-	public void deleteCouponPresent() throws CouponNotFoundException {
-		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
-		
-        Mockito.when(couponRepository.save(coupon)).thenReturn(coupon);
-
-		List<CouponDTO> actual = couponService.deleteCoupon(couponName);
-		assertEquals(1,actual.size());
-	}
-	*/
 	
 	@Test
-	public void updateCouponNotPresent()
+	public void deleteCouponPresent() {
+		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
+		Mockito.when(couponRepository.findById("GET50")).thenReturn(Optional.of(coupon));
+        Mockito.doNothing().when(couponRepository).delete(coupon);
+        @SuppressWarnings("unused")
+		List<CouponDTO> couponList = couponService.deleteCoupon(coupon.getCouponName());
+        Mockito.verify(couponRepository,times(1)).findById(coupon.getCouponName());
+		Mockito.verify(couponRepository,times(1)).delete(coupon);
+		Mockito.verifyNoMoreInteractions(couponRepository);
+		
+	}
+	
+	
+	@Test
+	public void updateCouponNotPresentTest()
 	{
 		
 		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
@@ -94,18 +98,9 @@ public class CouponServiceImplTest {
 		Mockito.when(couponRepository.findById("GET50")).thenReturn(null);
 		assertThrows(NullPointerException.class, () -> couponService.updateCoupon(CouponServiceImpl.entityToDTO(coupon)));
 	}
-	/*@Test
-	public void deleteCouponNotPresent()
-	{
-		
-		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
-		
-		//coupon.setCouponName(null);
-		Mockito.when(couponRepository.findById("GET50")).thenReturn(null);
-		assertThrows(NullPointerException.class, () -> couponService.deleteCoupon(CouponServiceImpl.entityToDTO(coupon)));
-	}*/
+	
 	@Test
-	public void findCouponNotPresent()
+	public void findCouponNotPresentTest()
 	{
 		@SuppressWarnings("unused")
 		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
@@ -116,7 +111,7 @@ public class CouponServiceImplTest {
 	
 	
 	@Test
-	public void findCouponPresent()
+	public void findCouponPresentTest()
 	{
 		
 		Coupon coupon1 = new Coupon("GET50", "50% OFF", "On Orders above 500Rs"); 
@@ -128,44 +123,9 @@ public class CouponServiceImplTest {
 		CouponDTO actual = couponService.findCoupon(coupon1.getCouponName());
 		assertEquals(CouponServiceImpl.entityToDTO(coupon1),actual);
 	}
-	/*@Test
-	public void findCouponNotPresent() {	
-
-		Mockito.when(couponRepository.findById("GET50")).thenThrow(new CouponNotFoundException("Coupon Not Found"));
-		Exception exception = assertThrows(CouponNotFoundException.class, () -> couponService.findCoupon(180));
-		assertEquals("Coupon Not Found",exception.getMessage());
-
-	}*/
-
-	/*@Test
-	public void findCouponNotPresent()
-	{
-        Coupon coupon1 = new Coupon("GET50", "50% OFF", "On Orders above 500Rs"); 
-		
-		coupon1.setCouponName(null);
-
-		Mockito.when(couponRepository.findAll()).thenThrow(new CouponNotFoundException("CouponName not present in the database"));
-		Exception exception = assertThrows(CouponNotFoundException.class,()->couponService.findCoupon(2));
-		assertTrue(exception.getMessage().contains("CouponName not present in the database"));
-	}*/
-	/*@Test
-	public void deleteCouponPresent() throws CouponNotFoundException {
-		String couponName = null;
-		Coupon coupon1 = new Coupon("GET50", "50% OFF", "On Orders above 500Rs"); 
-		//coupon1.setCouponName(null);
-		Mockito.when(couponRepository.findById("GET50")).thenReturn(Optional.of(coupon1));
-
-		Mockito.when(couponRepository.delete(coupon1)).thenReturn(coupon1);
-		Mockito.when(couponRepository.findAll()).thenReturn(coupon1);
-
-		List<CouponDTO> actual = couponService.deleteCoupon(CouponServiceImpl.entityToDTO(coupon1));
-		assertEquals(1,actual.size());
-	}*/
-
-	
 
 	@Test
-	public void deleteCouponNull()
+	public void deleteCouponNullTest()
 	{
 		String couponName= null;
 		List<CouponDTO> actual = couponService.deleteCoupon(couponName);
@@ -173,7 +133,7 @@ public class CouponServiceImplTest {
 	}
 
 	@Test
-	public void updateCouponNull()
+	public void updateCouponNullTest()
 	{
 		CouponDTO coupon1 = null;
 		List<CouponDTO> actual = couponService.updateCoupon(coupon1);
@@ -181,7 +141,7 @@ public class CouponServiceImplTest {
 	}
 	
 	@Test
-	public void saveCouponNull()
+	public void saveCouponNullTest()
 	{
 		CouponDTO coupon1 = null;
 		List<CouponDTO> actual = couponService.saveCoupon(coupon1);

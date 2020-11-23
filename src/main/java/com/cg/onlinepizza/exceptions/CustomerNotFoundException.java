@@ -1,6 +1,6 @@
 package com.cg.onlinepizza.exceptions;
 
-public class CustomerNotFoundException extends Exception {
+public class CustomerNotFoundException extends RuntimeException {
 
 	/**
 	 * 

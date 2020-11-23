@@ -42,7 +42,7 @@ public class OrderServiceImplTest {
 	private OrderRepository orderRepository;
 
 	@Test
-	public void getAllOrdersPresent()
+	public void getAllOrdersPresentTest()
 	{
 		CustomerDTO customer = new CustomerDTO("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
 		PizzaDTO pizzaDTO = new PizzaDTO("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
@@ -57,7 +57,7 @@ public class OrderServiceImplTest {
 	}
 
 	@Test
-	public void getAllOrdersNotPresent()
+	public void getAllOrdersNotPresentTest()
 	{
 		Mockito.when(orderRepository.findAll()).thenThrow(new OrderIdNotFoundException("No orders present in the database"));
 
@@ -66,7 +66,7 @@ public class OrderServiceImplTest {
 	}
 
 	@Test
-	public void findOrderNull()
+	public void findOrderNullTest()
 	{
 		Integer orderId = null;
 		OrderDTO actual = orderService.findOrder(orderId);
@@ -74,7 +74,7 @@ public class OrderServiceImplTest {
 	}
 
 	@Test
-	public void findOrderPresent()
+	public void findOrderPresentTest()
 	{
 		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
 		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
@@ -91,7 +91,7 @@ public class OrderServiceImplTest {
 	}
 
 	@Test
-	public void findOrderNotPresent()
+	public void findOrderNotPresentTest()
 	{
 		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
 		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
@@ -107,7 +107,7 @@ public class OrderServiceImplTest {
 	}
 
 	@Test
-	public void deleteOrderNull()
+	public void deleteOrderNullTest()
 	{
 		Integer orderId = null;
 		List<OrderDTO> actual = orderService.deleteOrder(orderId);
@@ -115,7 +115,7 @@ public class OrderServiceImplTest {
 	}
 
 	@Test
-	public void updateOrderNull()
+	public void updateOrderNullTest()
 	{
 		OrderDTO order1 = null;
 		List<OrderDTO> actual = orderService.updateOrder(order1);
@@ -123,7 +123,7 @@ public class OrderServiceImplTest {
 	}
 
 	@Test
-	public void updateOrderPresent()
+	public void updateOrderPresentTest()
 	{
 		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
 		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
@@ -142,7 +142,7 @@ public class OrderServiceImplTest {
 	}
 
 	@Test
-	public void updateOrderNotPresent()
+	public void updateOrderNotPresentTest()
 	{
 		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
 		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
@@ -158,7 +158,7 @@ public class OrderServiceImplTest {
 	}
 
 	@Test
-	public void saveOrderNull()
+	public void saveOrderNullTest()
 	{
 		OrderDTO order1 = null;
 		List<OrderDTO> actual = orderService.saveOrder(order1);
@@ -166,7 +166,7 @@ public class OrderServiceImplTest {
 	}
 
 	@Test
-	public void saveOrderPresent()
+	public void saveOrderPresentTest()
 	{
 		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
 		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);

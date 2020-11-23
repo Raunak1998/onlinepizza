@@ -184,7 +184,8 @@ public class CustomerServiceImpl implements CustomerService{
 	public CustomerDTO findCustomer(Integer customerId) throws CustomerNotFoundException {
 		
 		log.info("Service Layer - Entry - find Customer");
-		
+		if(customerId == null)
+			return null;
 		Optional<Customer>customer=customerRepository.findById(customerId);
 		
 		  if(customer.isEmpty()) { 

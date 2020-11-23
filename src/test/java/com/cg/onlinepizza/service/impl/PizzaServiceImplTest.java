@@ -35,7 +35,7 @@ public class PizzaServiceImplTest {
 	private PizzaRepository pizzaRepository;
 
 	@Test
-	public void getAllPizzasPresent()
+	public void getAllPizzasPresentTest()
 	{
 	
 		PizzaDTO pizza1 = new PizzaDTO("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
@@ -48,7 +48,7 @@ public class PizzaServiceImplTest {
 	}
 
 	@Test
-	public void getAllPizzasNotPresent()
+	public void getAllPizzasNotPresentTest()
 	{
 		Mockito.when(pizzaRepository.findAll()).thenThrow(new PizzaIdNotFoundException("No pizzas present in the database"));
 
@@ -57,7 +57,7 @@ public class PizzaServiceImplTest {
 	}
 
 	@Test
-	public void findPizzaNull()
+	public void findPizzaNullTest()
 	{
 		Integer pizzaId = null;
 		PizzaDTO actual = pizzaService.findPizza(pizzaId);
@@ -65,7 +65,7 @@ public class PizzaServiceImplTest {
 	}
 
 	@Test
-	public void findPizzaPresent()
+	public void findPizzaPresentTest()
 	{
 		
 		Pizza pizza1 = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
@@ -79,7 +79,7 @@ public class PizzaServiceImplTest {
 	}
 
 	@Test
-	public void findPizzaNotPresent()
+	public void findPizzaNotPresentTest()
 	{
 		Pizza pizza1 = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
 		
@@ -91,25 +91,22 @@ public class PizzaServiceImplTest {
 	}
 	
 	
+//	@Test
+//	public void deletePizzaPresentTest() throws PizzaIdNotFoundException {
+//		
+//		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
+//		pizza.setPizzaId(1);
+//		Pizza pizza2 = new Pizza("Veg", "Large", "Veg Premium", "Veg Pizza", 1000);
+//		pizza2.setPizzaId(2);
+//		Mockito.when(pizzaRepository.save(pizza)).thenReturn(pizza);
+//		Mockito.when(pizzaRepository.findAll()).thenReturn(Stream.of(pizza).collect(Collectors.toList()));
+//
+//		List<PizzaDTO> actual = pizzaService.deletePizza(pizza.getPizzaId());
+//		assertEquals(1,actual.size());
+//	}
+	
 	@Test
-	public void deletePizzaPresent() throws PizzaIdNotFoundException {
-		
-		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
-		pizza.setPizzaId(1);
-		Mockito.when(pizzaRepository.findById(1)).thenReturn(Optional.of(pizza));
-
-		Mockito.when(pizzaRepository.save(pizza)).thenReturn(pizza);
-		Mockito.when(pizzaRepository.findAll()).thenReturn(Stream.of(pizza).collect(Collectors.toList()));
-
-		List<PizzaDTO> actual = pizzaService.deletePizza(pizza.getPizzaId());
-		assertEquals(1,actual.size());
-	}
-	
-	
-	
-
-	@Test
-	public void deletePizzaNull()
+	public void deletePizzaNullTest()
 	{
 		Integer pizzaId = null;
 		List<PizzaDTO> actual = pizzaService.deletePizza(pizzaId);
@@ -117,18 +114,15 @@ public class PizzaServiceImplTest {
 	}
 
 	@Test
-	public void updatePizzaNull()
+	public void updatePizzaNullTest()
 	{
 		PizzaDTO pizza1 = null;
 		List<PizzaDTO> actual = pizzaService.updatePizza(pizza1);
 		assertNull(actual);
 	}
 
-	
-	
-
 	@Test
-	public void updatePizzaPresent()
+	public void updatePizzaPresentTest()
 	{
 		
 		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
@@ -146,7 +140,7 @@ public class PizzaServiceImplTest {
 	}
 
 	@Test
-	public void updatePizzaNotPresent()
+	public void updatePizzaNotPresentTest()
 	{
 		
 		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
@@ -157,7 +151,7 @@ public class PizzaServiceImplTest {
 	}
 
 	@Test
-	public void savePizzaNull()
+	public void savePizzaNullTest()
 	{
 		PizzaDTO pizza1 = null;
 		List<PizzaDTO> actual = pizzaService.savePizza(pizza1);
@@ -165,7 +159,7 @@ public class PizzaServiceImplTest {
 	}
 
 	@Test
-	public void savePizzaPresent()
+	public void savePizzaPresentTest()
 	{
 		
 		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);

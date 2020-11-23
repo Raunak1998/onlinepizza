@@ -1,6 +1,6 @@
 package com.cg.onlinepizza.exceptions;
 
-public class CustomerAlreadyExistsException extends Exception {
+public class CustomerAlreadyExistsException extends RuntimeException {
 	/**
 	 * 
 	 */

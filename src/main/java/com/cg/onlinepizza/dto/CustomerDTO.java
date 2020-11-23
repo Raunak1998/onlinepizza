@@ -26,7 +26,7 @@ public class CustomerDTO implements Serializable{
 	private String lastName;
     
 	@NotNull(message = "Phone number should be 10 characters long")
-	@Pattern(regexp = "(0/91)?[7-9][0-9]{9}")
+	@Pattern(regexp = "//d{10}")
 	private Long customerMobile;
     
 	@NotBlank(message = "Email cannot be blank")
@@ -138,6 +138,28 @@ public class CustomerDTO implements Serializable{
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + customerId;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CustomerDTO other = (CustomerDTO) obj;
+		if (customerId != other.customerId)
+			return false;
+		return true;
 	}
 
 	
