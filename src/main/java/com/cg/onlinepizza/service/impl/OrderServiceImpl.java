@@ -1,5 +1,6 @@
 package com.cg.onlinepizza.service.impl;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,6 +15,7 @@ import com.cg.onlinepizza.dto.CouponDTO;
 import com.cg.onlinepizza.dto.CustomerDTO;
 import com.cg.onlinepizza.dto.OrderDTO;
 import com.cg.onlinepizza.dto.PizzaDTO;
+import com.cg.onlinepizza.exceptions.CustomerNotFoundException;
 import com.cg.onlinepizza.exceptions.DatabaseException;
 import com.cg.onlinepizza.exceptions.OrderIdNotFoundException;
 import com.cg.onlinepizza.model.Coupon;
@@ -235,5 +237,25 @@ public class OrderServiceImpl implements OrderService {
 		
 		return  orderDTOReturn;
 	}
+	
 
+	@Override
+	public List<OrderDTO> findOrdersByCustomerId(Integer customerId) throws CustomerNotFoundException{
+		log.info("Service Layer - Entry - Find Orders By CustomerId");
+		if (customerId == null)
+			return null;
+		
+		List<Order> orders = new ArrayList<>();
+		orderRepository.findByCustomerCustomerId(customerId).forEach(orders::add);
+		
+		if(orders.size()<1)
+			throw new CustomerNotFoundException("Customer not present");
+		
+		List<OrderDTO> ordersReturn = new ArrayList<>();
+		for (Order o : orders ) {
+			ordersReturn.add(entityToDTO(o));
+		}
+		log.info("Service Layer - Exit - Find Orders By Customer");
+		return ordersReturn;
+	}
 }

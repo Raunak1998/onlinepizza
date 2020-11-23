@@ -25,7 +25,7 @@ import com.cg.onlinepizza.service.CustomerService;
 
 
 @RestController
-@RequestMapping("/onlinepizza/customer")
+@RequestMapping("/customer")
 public class CustomerController {
 
 	@Autowired
@@ -63,6 +63,17 @@ public class CustomerController {
 	public ResponseEntity<List<CustomerDTO>> getAllCustomers() throws CustomersNotPresentException{
 		List<CustomerDTO> customers= customerService.getAllCustomers();
 		return new ResponseEntity<List<CustomerDTO>>(customers, HttpStatus.OK);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping("/login")
+	public ResponseEntity<CustomerDTO> signIn(@Valid @RequestBody CustomerDTO customerDTO) {
+
+		CustomerDTO customers = customerService.signIn(customerDTO);
+		if (customers == null) {
+			return new ResponseEntity("Sorry! Users not available!", HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<CustomerDTO>(customers, HttpStatus.OK);
 	}
 }
 

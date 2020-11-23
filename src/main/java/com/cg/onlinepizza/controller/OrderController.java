@@ -66,5 +66,12 @@ public class OrderController {
 		return new ResponseEntity("Sorry! Orders not found!", 
 				HttpStatus.NOT_FOUND);
 	}
+	
+	@GetMapping("find/customer/{customerId}")
+	public ResponseEntity<List<OrderDTO>> getAllOrdersByCustomer(@PathVariable("customerId") Integer customerId){
+		List<OrderDTO> orders = orderService.findOrdersByCustomerId(customerId);
+		return new ResponseEntity<List<OrderDTO>>(orders, HttpStatus.OK);
+	}
+	
 
 }

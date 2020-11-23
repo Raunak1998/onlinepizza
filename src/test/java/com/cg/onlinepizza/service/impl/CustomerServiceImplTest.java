@@ -2,7 +2,6 @@ package com.cg.onlinepizza.service.impl;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -19,11 +18,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.cg.onlinepizza.dto.CustomerDTO;
-import com.cg.onlinepizza.dto.OrderDTO;
 import com.cg.onlinepizza.exceptions.CustomerAlreadyExistsException;
 import com.cg.onlinepizza.exceptions.CustomerNotFoundException;
 import com.cg.onlinepizza.exceptions.CustomersNotPresentException;
-import com.cg.onlinepizza.exceptions.OrderIdNotFoundException;
 import com.cg.onlinepizza.model.Customer;
 import com.cg.onlinepizza.repository.CustomerRepository;
 import com.cg.onlinepizza.service.CustomerService;
@@ -96,7 +93,7 @@ public class CustomerServiceImplTest {
 	@Test 
 	public void findCustomerNotPresentTest() {
 
-		Mockito.when(customerRepository.findAll()).thenThrow(new CustomersNotPresentException("Customer not present in the database"));
+		Mockito.when(customerRepository.findById(2)).thenThrow(new CustomersNotPresentException("Customer not present in the database"));
 		Exception exception = assertThrows(CustomersNotPresentException.class,()->customerService.findCustomer(2));
 		assertTrue(exception.getMessage().contains("Customer not present in the database"));
 	}
@@ -148,6 +145,28 @@ public class CustomerServiceImplTest {
 		List<CustomerDTO> actual = customerService.deleteCustomer(customerId);
 		assertNull(actual);
 	}
+	
+	@Test
+	public void signInSuccessTest() {
+		Customer customer = new Customer("Mythili","Seela",(long)1234567890,"abc@gmail.com","2-27,Rajahmundry","mythu27","2727",null);
+		customer.setCustomerId(1);
+		Integer id = customer.getCustomerId();
+		String password = customer.getPassword();
+		Mockito.when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
+		CustomerDTO actual = customerService.findCustomer(id);
+		Integer id1 = actual.getCustomerId();
+		String password1 = actual.getPassword();
+		assertEquals(id,id1);
+		assertEquals(password,password1);	
+	}
+	
+	@Test
+	public void signInNullTest() throws CustomerNotFoundException {
+		
+			CustomerDTO user = null;	
+			CustomerDTO actual = customerService.signIn(user);			
+			assertNull(actual);
+		}
 
 //	@Test
 //	public void deleteCustomerPresentTest() throws CustomerNotFoundException 

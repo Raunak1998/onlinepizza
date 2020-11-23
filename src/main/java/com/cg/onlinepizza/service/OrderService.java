@@ -19,4 +19,6 @@ public interface OrderService {
 	public List<OrderDTO> saveOrder(OrderDTO order);
 
 	public List<OrderDTO> updateOrder(OrderDTO order) throws OrderIdNotFoundException;
+
+	public List<OrderDTO> findOrdersByCustomerId(Integer customerId);
 }

@@ -10,13 +10,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
-
 
 import com.cg.onlinepizza.dto.PizzaDTO;
 import com.cg.onlinepizza.exceptions.PizzaIdNotFoundException;
@@ -25,7 +22,6 @@ import com.cg.onlinepizza.repository.PizzaRepository;
 
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
 public class PizzaServiceImplTest {
 
 	@Autowired

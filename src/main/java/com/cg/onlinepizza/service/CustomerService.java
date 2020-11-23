@@ -22,6 +22,8 @@ public interface CustomerService {
 
 	public List<CustomerDTO> updateCustomer(CustomerDTO customerDTO)throws CustomerNotFoundException;
 
+	public CustomerDTO signIn(CustomerDTO customerDTO) ;
+
 }
 
 

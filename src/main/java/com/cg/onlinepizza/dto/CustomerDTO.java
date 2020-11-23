@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class CustomerDTO implements Serializable{
@@ -26,7 +25,6 @@ public class CustomerDTO implements Serializable{
 	private String lastName;
     
 	@NotNull(message = "Phone number should be 10 characters long")
-	@Pattern(regexp = "//d{10}")
 	private Long customerMobile;
     
 	@NotBlank(message = "Email cannot be blank")

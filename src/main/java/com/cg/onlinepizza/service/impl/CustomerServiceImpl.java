@@ -181,7 +181,7 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 
 	@Override
-	public CustomerDTO findCustomer(Integer customerId) throws CustomerNotFoundException {
+	public CustomerDTO findCustomer(Integer customerId) throws CustomersNotPresentException {
 		
 		log.info("Service Layer - Entry - find Customer");
 		if(customerId == null)
@@ -190,13 +190,42 @@ public class CustomerServiceImpl implements CustomerService{
 		
 		  if(customer.isEmpty()) { 
 			  
-			  throw new CustomerNotFoundException("Customer Not Found"); 
+			  throw new CustomersNotPresentException("Customer Not Found"); 
 			  }
 		
 		 log.info("Service Layer - Exit - find Customer");	
 		return entityToDTO(customer.get());
 	}
 
+	@Override
+	public CustomerDTO signIn(CustomerDTO customerDTO) throws CustomerNotFoundException {
+
+		if (customerDTO == null) {
+			return null;
+		}
+
+		Customer customer = DTOToEntity(customerDTO);
+		if (customer == null) {
+			log.warn("No User Available");
+			throw new CustomerNotFoundException("Customer Not Found");
+		}
+
+		Optional<Customer> option = customerRepository.findById(customer.getCustomerId());
+		if (!option.isPresent()) {
+			log.warn("No User Available");
+			throw new CustomerNotFoundException("Customer Not Found");
+		}
+
+		if (!option.get().getPassword().equals(customerDTO.getPassword())) {
+			log.warn("No User Available");
+			throw new CustomerNotFoundException("Customer Not Found");
+		}
+
+		customer = option.get();
+		CustomerDTO dto = entityToDTO(customer);
+
+		return dto;
+	}
 }
 
 
