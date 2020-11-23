@@ -31,6 +31,7 @@ public class CouponServiceImplTest {
 	@MockBean
 	CouponRepository couponRepository;
 	
+	//Retrieving all the coupons present
 	@Test
 	public void getAllCouponsPresentTest()
 	{
@@ -43,6 +44,7 @@ public class CouponServiceImplTest {
 		assertEquals(2,actual.size());
 	}
 
+	//No coupons present to retrieve
 	@Test
 	public void getAllCouponsNotPresentTest()
 	{
@@ -52,6 +54,7 @@ public class CouponServiceImplTest {
 		assertTrue(exception.getMessage().contains("No coupons present in the database"));
 	}
 	
+	//Checks save coupon method to add new values
 	@Test
 	public void saveCouponPresentTest()  {
 		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
@@ -60,6 +63,8 @@ public class CouponServiceImplTest {
 		List<CouponDTO> actual = couponService.getAllCoupon();
 		assertEquals(1,actual.size());
 	}
+	
+	//Checks if the coupon is present in database so as to perform update operation
 	@Test
 	public void updateCouponPresentTest() throws CouponNotFoundException {
 		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
@@ -85,7 +90,7 @@ public class CouponServiceImplTest {
 	}
 	*/
 	
-	
+	//Checks if the coupon passed to update is not found in database and returns an appropriate error
 	@Test
 	public void updateCouponNotPresentTest()
 	{
@@ -97,6 +102,7 @@ public class CouponServiceImplTest {
 		assertThrows(NullPointerException.class, () -> couponService.updateCoupon(CouponServiceImpl.entityToDTO(coupon)));
 	}
 	
+	//Checks if the coupon is not found in database and returns an appropriate error
 	@Test
 	public void findCouponNotPresentTest()
 	{
@@ -107,7 +113,7 @@ public class CouponServiceImplTest {
 		assertTrue(exception.getMessage().contains("Coupon not present in the database"));
 	}
 	
-	
+	//Checks if the coupon is present in database
 	@Test
 	public void findCouponPresentTest()
 	{
@@ -122,6 +128,7 @@ public class CouponServiceImplTest {
 		assertEquals(CouponServiceImpl.entityToDTO(coupon1),actual);
 	}
 
+	//Check the delete coupon method for null values
 	@Test
 	public void deleteCouponNullTest()
 	{
@@ -130,6 +137,7 @@ public class CouponServiceImplTest {
 		assertNull(actual);
 	}
 
+	//Check the update coupon method for null values
 	@Test
 	public void updateCouponNullTest()
 	{
@@ -138,6 +146,7 @@ public class CouponServiceImplTest {
 		assertNull(actual);
 	}
 	
+	//Check the save coupon method for null values
 	@Test
 	public void saveCouponNullTest()
 	{
