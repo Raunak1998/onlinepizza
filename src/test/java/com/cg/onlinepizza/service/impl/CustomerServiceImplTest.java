@@ -34,6 +34,7 @@ public class CustomerServiceImplTest {
 	@MockBean
 	CustomerRepository customerRepository;
 
+	//Check the saveCustomer method for null values.
 	@Test
 	public void saveCustomerNullTest() throws CustomerAlreadyExistsException
 	{
@@ -42,6 +43,7 @@ public class CustomerServiceImplTest {
 		assertNull(actual);
 	}
 
+	//Check the saveCustomer method to add new values.
 	@Test
 	public void saveCustomerTest() throws CustomersNotPresentException {
 		Customer customer = new Customer("Ram","Achanta",(long) 1235667890,"abc@gmail.com","2-33,kakinada","Ram101","1234",null);
@@ -51,6 +53,7 @@ public class CustomerServiceImplTest {
 		assertEquals(1,actual.size());
 	}
 
+	//checks if the customer already exists or not.
 	@Test
 	public void saveExistingCustomerTest() {
 		Customer customer1 = new Customer("Ram","Achanta",(long) 1235667890,"abc@gmail.com","2-33,kakinada","Ram101","1234",null);
@@ -61,6 +64,7 @@ public class CustomerServiceImplTest {
 		assertTrue(exception.getMessage().contains("Customer Already Exists"));
 	}
 
+	//Retrieving all the customers present.
 	@Test
 	public void getAllCustomersPresentTest() throws CustomersNotPresentException {
 		CustomerDTO customer1 = new CustomerDTO("Ram","Achanta",(long) 1235667890,"abc@gmail.com","2-33,kakinada","Ram101","1234",null);
@@ -72,6 +76,7 @@ public class CustomerServiceImplTest {
 		assertEquals(2,actual.size());
 	}
 
+	//No customers are present to retrieve.
 	@Test
 	public void getAllCustomersNotPresentTest()
 	{
@@ -81,6 +86,7 @@ public class CustomerServiceImplTest {
 		assertTrue(exception.getMessage().contains("No customers present in the database"));
 	}
 
+	//checks if the customer is present.
 	@Test 
 	public void findCustomerPresentTest() throws CustomerNotFoundException {
 		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
@@ -90,6 +96,7 @@ public class CustomerServiceImplTest {
 		assertEquals(CustomerServiceImpl.entityToDTO(customer),actual);
 	}
 
+	//checks if the customer is not present and returns an appropriate error.
 	@Test 
 	public void findCustomerNotPresentTest() {
 
@@ -98,6 +105,7 @@ public class CustomerServiceImplTest {
 		assertTrue(exception.getMessage().contains("Customer not present in the database"));
 	}
 
+	//check the find customer method for null values.
 	@Test
 	public void findCustomerNullTest() throws CustomerNotFoundException
 	{
@@ -106,7 +114,7 @@ public class CustomerServiceImplTest {
 		assertNull(actual);
 	}
 
-
+        //check the update customer method for null values.
 	@Test
 	public void updateCustomerNullTest() throws CustomerNotFoundException
 	{
@@ -115,6 +123,7 @@ public class CustomerServiceImplTest {
 		assertNull(actual);
 	}
 
+	//Checks if the value is present in database so as to perform update operation using updateCustomer method.
 	@Test
 	public void updateCustomerPresentTest() throws CustomerNotFoundException {
 		Customer customer = new Customer("Mythili","Seela",(long)1234567890,"abc@gmail.com","2-27,Rajahmundry","mythu27","2727",null);
@@ -128,6 +137,7 @@ public class CustomerServiceImplTest {
 		assertEquals(1,actual.size());
 	}
 
+	//Checks if the customer passed to update is not found in database and returns an appropriate error.
 	@Test
 	public void updateCustomerNotPresentTest() throws CustomerNotFoundException 
 	{
@@ -138,6 +148,7 @@ public class CustomerServiceImplTest {
 		assertTrue(exception.getMessage().contains("Customer not present in the database"));
 	}
 
+	//check the delete customer method for null values.
 	@Test
 	public void deleteCustomerNullTest() throws CustomerNotFoundException
 	{
@@ -146,6 +157,7 @@ public class CustomerServiceImplTest {
 		assertNull(actual);
 	}
 	
+	//checks if the sign in is done successfully or not.
 	@Test
 	public void signInSuccessTest() {
 		Customer customer = new Customer("Mythili","Seela",(long)1234567890,"abc@gmail.com","2-27,Rajahmundry","mythu27","2727",null);
@@ -160,6 +172,7 @@ public class CustomerServiceImplTest {
 		assertEquals(password,password1);	
 	}
 	
+	//check the sign in method for null values.
 	@Test
 	public void signInNullTest() throws CustomerNotFoundException {
 		
