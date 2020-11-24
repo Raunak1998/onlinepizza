@@ -11,23 +11,19 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-//import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-//import org.springframework.test.context.junit4.SpringRunner;
 
 
 import com.cg.onlinepizza.dto.PizzaDTO;
-import com.cg.onlinepizza.exceptions.PizzaAlreadyExistsException;
 import com.cg.onlinepizza.exceptions.PizzaIdNotFoundException;
 import com.cg.onlinepizza.model.Pizza;
 import com.cg.onlinepizza.repository.PizzaRepository;
 
 
 @SpringBootTest
-//@RunWith(SpringRunner.class)
 public class PizzaServiceImplTest {
 
 	@Autowired
@@ -40,8 +36,8 @@ public class PizzaServiceImplTest {
 	public void getAllPizzasPresent()
 	{
 	
-		PizzaDTO pizza1 = new PizzaDTO(1002,"Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
-		PizzaDTO pizza2 = new PizzaDTO(1003,"Non Veg", "Large", "Non Veg Exotica", "Premium Non Veg Pizza", 600);
+		PizzaDTO pizza1 = new PizzaDTO("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
+		PizzaDTO pizza2 = new PizzaDTO("Non Veg", "Large", "Non Veg Exotica", "Premium Non Veg Pizza", 600);
 		
 		
 		Mockito.when(pizzaRepository.findAll()).thenReturn(Stream.of(PizzaServiceImpl.DTOToEntity(pizza1),PizzaServiceImpl.DTOToEntity(pizza2)).collect(Collectors.toList()));
