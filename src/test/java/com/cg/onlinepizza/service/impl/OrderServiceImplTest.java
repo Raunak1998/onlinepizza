@@ -39,6 +39,7 @@ public class OrderServiceImplTest {
 	@MockBean
 	private OrderRepository orderRepository;
 
+	//Test for getting all orders when they are present in the database.
 	@Test
 	public void getAllOrdersPresentTest()
 	{
@@ -54,6 +55,7 @@ public class OrderServiceImplTest {
 		assertEquals(2,actual.size());
 	}
 
+	//Test for getting all the orders when the database is empty.
 	@Test
 	public void getAllOrdersNotPresentTest()
 	{
@@ -63,6 +65,7 @@ public class OrderServiceImplTest {
 		assertTrue(exception.getMessage().contains("No orders present in the database"));
 	}
 
+	//Test checking if orderId null is present in the database or not.
 	@Test
 	public void findOrderNullTest()
 	{
@@ -71,6 +74,7 @@ public class OrderServiceImplTest {
 		assertNull(actual);
 	}
 
+	//Test for checking if the order is preset in the database or not.
 	@Test
 	public void findOrderPresentTest()
 	{
@@ -88,6 +92,7 @@ public class OrderServiceImplTest {
 		assertEquals(OrderServiceImpl.entityToDTO(order1),actual);
 	}
 
+	//Test for checking if the given orderId is not present in the database.
 	@Test
 	public void findOrderNotPresentTest()
 	{
@@ -104,6 +109,7 @@ public class OrderServiceImplTest {
 		assertTrue(exception.getMessage().contains("OrderId not present in the database"));
 	}
 
+	//Test for checking that null orderId cannot be removed.
 	@Test
 	public void deleteOrderNullTest()
 	{
@@ -112,6 +118,7 @@ public class OrderServiceImplTest {
 		assertNull(actual);
 	}
 
+	//Test for updating a null orderId.
 	@Test
 	public void updateOrderNullTest()
 	{
@@ -120,6 +127,7 @@ public class OrderServiceImplTest {
 		assertNull(actual);
 	}
 
+	//Test for updating a orderId
 	@Test
 	public void updateOrderPresentTest()
 	{
@@ -139,6 +147,7 @@ public class OrderServiceImplTest {
 		assertEquals(1,actual.size());
 	}
 
+	//Test for updating a orderId which is not present n the database
 	@Test
 	public void updateOrderNotPresentTest()
 	{
@@ -155,6 +164,7 @@ public class OrderServiceImplTest {
 		assertTrue(exception.getMessage().contains("OrderId not present in the database"));
 	}
 
+	//Test for saving a null order
 	@Test
 	public void saveOrderNullTest()
 	{
@@ -163,6 +173,7 @@ public class OrderServiceImplTest {
 		assertNull(actual);
 	}
 
+	//Test for saving an order in the database.
 	@Test
 	public void saveOrderPresentTest()
 	{
@@ -182,6 +193,7 @@ public class OrderServiceImplTest {
 		assertEquals(1,actual.size());
 	}
 
+	//Test for finding the order by a particular cudtomerId.
 	@Test
 	public void findOrdersByCustomerIdPresentTest()
 	{
@@ -202,6 +214,7 @@ public class OrderServiceImplTest {
 		assertEquals(ordersExpected,actual);
 	}
 
+	//Test for finding the orders where they are not present for a particular customer Id.
 	@Test
 	public void findOrdersByCustomerIdNotPresentTest()
 	{
@@ -218,6 +231,7 @@ public class OrderServiceImplTest {
 		assertTrue(exception.getMessage().contains("Customer not present"));
 	}
 	
+	//Test for finding orders where customerIds are null.
 	@Test
 	public void findOrdersByCustomerNullTest() {
 		

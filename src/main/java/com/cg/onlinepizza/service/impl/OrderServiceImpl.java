@@ -1,6 +1,5 @@
 package com.cg.onlinepizza.service.impl;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -124,6 +123,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 
+	//Method that returns List of all orders present in the database.
 	@SuppressWarnings("unused")
 	@Override
 	public List<OrderDTO> getAllOrders() throws OrderIdNotFoundException{
@@ -142,6 +142,7 @@ public class OrderServiceImpl implements OrderService {
 		return  orderDTOReturn;
 	}
 
+	//Method return the details of the particular OrderId.
 	@Override
 	public OrderDTO findOrder(Integer orderId) throws OrderIdNotFoundException {
 		
@@ -161,6 +162,7 @@ public class OrderServiceImpl implements OrderService {
 		return entityToDTO(order.get());
 	}
 
+	//Method removes the the order permanently from the database
 	@Override
 	public List<OrderDTO> deleteOrder(Integer orderId) throws OrderIdNotFoundException{
 		
@@ -189,6 +191,7 @@ public class OrderServiceImpl implements OrderService {
 		return  orderDTOReturn;
 	}
 
+	//Methods adds the details of the order in the database.
 	@Override
 	public List<OrderDTO> saveOrder(OrderDTO orderDTO) throws DatabaseException{
 		
@@ -213,6 +216,7 @@ public class OrderServiceImpl implements OrderService {
 		return  orderDTOReturn;
 	}
 
+	//Method checks for the existing orders in the database and updates the details.
 	@Override
 	public List<OrderDTO> updateOrder(OrderDTO orderDTO) throws OrderIdNotFoundException{
 		
@@ -238,7 +242,7 @@ public class OrderServiceImpl implements OrderService {
 		return  orderDTOReturn;
 	}
 	
-
+	//Method returns all the orders based on the given customerId.
 	@Override
 	public List<OrderDTO> findOrdersByCustomerId(Integer customerId) throws CustomerNotFoundException{
 		log.info("Service Layer - Entry - Find Orders By CustomerId");
