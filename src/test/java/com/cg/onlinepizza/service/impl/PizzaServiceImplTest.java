@@ -85,7 +85,7 @@ public class PizzaServiceImplTest {
 
 		Mockito.when(pizzaRepository.findAll()).thenThrow(new PizzaIdNotFoundException("PizzaId not present in the database"));
 		Exception exception = assertThrows(PizzaIdNotFoundException.class,()->pizzaService.findPizza(1));
-		assertEquals("Pizza with id "+pizza1.getPizzaId()+"not Found",exception.getMessage());
+		assertEquals("Pizza with id "+pizza1.getPizzaId()+" not Found",exception.getMessage());
 	}
 	/*
 	@Test
@@ -148,7 +148,7 @@ public class PizzaServiceImplTest {
 
 		Mockito.when(pizzaRepository.save(pizza)).thenThrow(new PizzaIdNotFoundException("PizzaId not present in the database"));
 		Exception exception = assertThrows(PizzaIdNotFoundException.class,()->pizzaService.findPizza(1));
-		assertEquals("Pizza with id "+pizza.getPizzaId()+"not Found",exception.getMessage());
+		assertEquals("Pizza with id "+pizza.getPizzaId()+" not Found",exception.getMessage());
 	}
 
 	@Test
