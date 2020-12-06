@@ -135,4 +135,15 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler{
 
 		return new ResponseEntity<Object> (exceptionResponse, HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(CustomerUserNameNotFoundException.class)
+	public ResponseEntity<Object> handleCustomerUserNameNotFoundException(CustomerUserNameNotFoundException exception, WebRequest request) {
+
+		ExceptionResponse exceptionResponse = new ExceptionResponse();
+		exceptionResponse.setStatus(404);
+		exceptionResponse.setTime(LocalDateTime.now());
+		exceptionResponse.setMessage(exception.getMessage());
+
+		return new ResponseEntity<Object> (exceptionResponse, HttpStatus.NOT_FOUND);
+	}
 }

@@ -52,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
 
 		orderDTO.setCustomer(customerDTO);
 
-		Set<PizzaDTO> pizzasDTO = new HashSet<>();
+		List<PizzaDTO> pizzasDTO = new ArrayList<>();
 		Set<Pizza> pizzas = new HashSet<>(order.getPizzas());
 		for(Pizza p:pizzas)
 		{
@@ -97,7 +97,7 @@ public class OrderServiceImpl implements OrderService {
 
 		order.setCustomer(customer);
 
-		Set<Pizza> pizzas = new HashSet<>();
+		List<Pizza> pizzas = new ArrayList<>();
 		Set<PizzaDTO> pizzasDTO = new HashSet<>(orderDTO.getPizzas());
 		for(PizzaDTO p:pizzasDTO)
 		{

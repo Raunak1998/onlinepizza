@@ -2,8 +2,7 @@ package com.cg.onlinepizza.dto;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Set;
-
+import java.util.List;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -30,7 +29,7 @@ public class OrderDTO implements Serializable{
 	private CustomerDTO customer;
 	
 	@NotNull(message = "Pizzas should be present in the order to place it.")
-	private Set<PizzaDTO> pizzas;
+	private List<PizzaDTO> pizzas;
 
 	private CouponDTO coupon; 
 
@@ -40,7 +39,7 @@ public class OrderDTO implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public OrderDTO(LocalDate orderDate, double totalCost, CustomerDTO customer, Set<PizzaDTO> pizzas,
+	public OrderDTO(LocalDate orderDate, double totalCost, CustomerDTO customer, List<PizzaDTO> pizzas,
 			CouponDTO coupon) {
 		super();
 		this.orderDate = orderDate;
@@ -83,11 +82,11 @@ public class OrderDTO implements Serializable{
 	}
 
 
-	public Set<PizzaDTO> getPizzas() {
+	public List<PizzaDTO> getPizzas() {
 		return pizzas;
 	}
 
-	public void setPizzas(Set<PizzaDTO> pizzas) {
+	public void setPizzas(List<PizzaDTO> pizzas) {
 		this.pizzas = pizzas;
 	}
 

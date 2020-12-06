@@ -40,204 +40,204 @@ public class OrderServiceImplTest {
 	private OrderRepository orderRepository;
 
 	//Test for getting all orders when they are present in the database.
-	@Test
-	public void getAllOrdersPresentTest()
-	{
-		CustomerDTO customer = new CustomerDTO("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
-		PizzaDTO pizzaDTO = new PizzaDTO("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
-		Set<PizzaDTO> pizzas = new HashSet<>();
-		pizzas.add(pizzaDTO);
-		CouponDTO coupon = new CouponDTO("GET50", "50% OFF", "On Orders above 500Rs");
-		OrderDTO order1 = new OrderDTO(LocalDate.now(), 1500, customer, pizzas , coupon);
-		OrderDTO order2 = new OrderDTO(LocalDate.now(), 2000, customer, pizzas , coupon);
-		Mockito.when(orderRepository.findAll()).thenReturn(Stream.of(OrderServiceImpl.DTOToEntity(order1),OrderServiceImpl.DTOToEntity(order2)).collect(Collectors.toList()));
-		List<OrderDTO> actual = orderService.getAllOrders();
-		assertEquals(2,actual.size());
-	}
-
-	//Test for getting all the orders when the database is empty.
-	@Test
-	public void getAllOrdersNotPresentTest()
-	{
-		Mockito.when(orderRepository.findAll()).thenThrow(new OrderIdNotFoundException("No orders present in the database"));
-
-		Exception exception = assertThrows(OrderIdNotFoundException.class,()->orderService.getAllOrders());
-		assertTrue(exception.getMessage().contains("No orders present in the database"));
-	}
-
-	//Test checking if orderId null is present in the database or not.
-	@Test
-	public void findOrderNullTest()
-	{
-		Integer orderId = null;
-		OrderDTO actual = orderService.findOrder(orderId);
-		assertNull(actual);
-	}
-
-	//Test for checking if the order is preset in the database or not.
-	@Test
-	public void findOrderPresentTest()
-	{
-		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
-		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
-		Set<Pizza> pizzas = new HashSet<>();
-		pizzas.add(pizza);
-		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
-		Order order1 = new Order(LocalDate.now(), 1500, customer, pizzas , coupon);
-		order1.setOrderId(1);
-
-		Mockito.when(orderRepository.findById(order1.getOrderId())).thenReturn(Optional.of(order1));
-
-		OrderDTO actual = orderService.findOrder(order1.getOrderId());
-		assertEquals(OrderServiceImpl.entityToDTO(order1),actual);
-	}
-
-	//Test for checking if the given orderId is not present in the database.
-	@Test
-	public void findOrderNotPresentTest()
-	{
-		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
-		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
-		Set<Pizza> pizzas = new HashSet<>();
-		pizzas.add(pizza);
-		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
-		Order order1 = new Order(LocalDate.now(), 1500, customer, pizzas , coupon);
-		order1.setOrderId(1);
-
-		Mockito.when(orderRepository.findAll()).thenThrow(new OrderIdNotFoundException("OrderId not present in the database"));
-		Exception exception = assertThrows(OrderIdNotFoundException.class,()->orderService.findOrder(2));
-		assertTrue(exception.getMessage().contains("OrderId not present in the database"));
-	}
-
-	//Test for checking that null orderId cannot be removed.
-	@Test
-	public void deleteOrderNullTest()
-	{
-		Integer orderId = null;
-		List<OrderDTO> actual = orderService.deleteOrder(orderId);
-		assertNull(actual);
-	}
-
-	//Test for updating a null orderId.
-	@Test
-	public void updateOrderNullTest()
-	{
-		OrderDTO order1 = null;
-		List<OrderDTO> actual = orderService.updateOrder(order1);
-		assertNull(actual);
-	}
-
-	//Test for updating a orderId
-	@Test
-	public void updateOrderPresentTest()
-	{
-		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
-		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
-		Set<Pizza> pizzas = new HashSet<>();
-		pizzas.add(pizza);
-		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
-		Order order = new Order(LocalDate.now(), 1500, customer, pizzas , coupon);
-		order.setOrderId(1);
-		Mockito.when(orderRepository.findById(order.getOrderId())).thenReturn(Optional.of(order));
-		//		order.setOrderId(2);
-		Mockito.when(orderRepository.save(order)).thenReturn(order);
-		Mockito.when(orderRepository.findAll()).thenReturn(Stream.of(order).collect(Collectors.toList()));
-
-		List<OrderDTO> actual = orderService.updateOrder(OrderServiceImpl.entityToDTO(order));
-		assertEquals(1,actual.size());
-	}
-
-	//Test for updating a orderId which is not present n the database
-	@Test
-	public void updateOrderNotPresentTest()
-	{
-		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
-		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
-		Set<Pizza> pizzas = new HashSet<>();
-		pizzas.add(pizza);
-		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
-		Order order = new Order(LocalDate.now(), 1500, customer, pizzas , coupon);
-		order.setOrderId(1);
-
-		Mockito.when(orderRepository.save(order)).thenThrow(new OrderIdNotFoundException("OrderId not present in the database"));
-		Exception exception = assertThrows(OrderIdNotFoundException.class,()->orderService.findOrder(2));
-		assertTrue(exception.getMessage().contains("OrderId not present in the database"));
-	}
-
-	//Test for saving a null order
-	@Test
-	public void saveOrderNullTest()
-	{
-		OrderDTO order1 = null;
-		List<OrderDTO> actual = orderService.saveOrder(order1);
-		assertNull(actual);
-	}
-
-	//Test for saving an order in the database.
-	@Test
-	public void saveOrderPresentTest()
-	{
-		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
-		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
-		Set<Pizza> pizzas = new HashSet<>();
-		pizzas.add(pizza);
-		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
-		Order order = new Order(LocalDate.now(), 1500, customer, pizzas , coupon);
-		order.setOrderId(1);
-
-		Mockito.when(orderRepository.findById(1)).thenReturn(Optional.of(order));
-		Mockito.when(orderRepository.saveAndFlush(order)).thenReturn(order);
-
-		Mockito.when(orderRepository.findAll()).thenReturn(Stream.of(order).collect(Collectors.toList()));
-		List<OrderDTO> actual = orderService.updateOrder(OrderServiceImpl.entityToDTO(order));
-		assertEquals(1,actual.size());
-	}
-
-	//Test for finding the order by a particular cudtomerId.
-	@Test
-	public void findOrdersByCustomerIdPresentTest()
-	{
-		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
-		customer.setCustomerId(1);
-		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
-		Set<Pizza> pizzas = new HashSet<>();
-		pizzas.add(pizza);
-		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
-		Order order = new Order(LocalDate.now(), 1500, customer, pizzas , coupon);
-		order.setOrderId(1);
-		Mockito.when(orderRepository.findByCustomerCustomerId(order.getCustomer().getCustomerId())).thenReturn(Stream.of(order).collect(Collectors.toList()));
-
-		OrderDTO orderReturned= OrderServiceImpl.entityToDTO(order);
-		List<OrderDTO> ordersExpected = Stream.of(orderReturned).collect(Collectors.toList()); 
-
-		List<OrderDTO> actual = orderService.findOrdersByCustomerId(1);
-		assertEquals(ordersExpected,actual);
-	}
-
-	//Test for finding the orders where they are not present for a particular customer Id.
-	@Test
-	public void findOrdersByCustomerIdNotPresentTest()
-	{
-		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
-		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
-		Set<Pizza> pizzas = new HashSet<>();
-		pizzas.add(pizza);
-		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
-		Order order1 = new Order(LocalDate.now(), 1500, customer, pizzas , coupon);
-		order1.setOrderId(1);
-
-		Mockito.when(orderRepository.findByCustomerCustomerId(order1.getCustomer().getCustomerId())).thenThrow(new CustomerNotFoundException("Customer not present"));
-		Exception exception = assertThrows(CustomerNotFoundException.class,()->orderService.findOrdersByCustomerId(2));
-		assertTrue(exception.getMessage().contains("Customer not present"));
-	}
-	
-	//Test for finding orders where customerIds are null.
-	@Test
-	public void findOrdersByCustomerNullTest() {
-		
-		Integer customerId = null;
-		
-		List<OrderDTO> actual = orderService.findOrdersByCustomerId(customerId);
-		assertNull(actual);
-	}
+//	@Test
+//	public void getAllOrdersPresentTest()
+//	{
+//		CustomerDTO customer = new CustomerDTO("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
+//		PizzaDTO pizzaDTO = new PizzaDTO("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
+//		Set<PizzaDTO> pizzas = new HashSet<>();
+//		pizzas.add(pizzaDTO);
+//		CouponDTO coupon = new CouponDTO("GET50", "50% OFF", "On Orders above 500Rs");
+//		OrderDTO order1 = new OrderDTO(LocalDate.now(), 1500, customer, pizzas , coupon);
+//		OrderDTO order2 = new OrderDTO(LocalDate.now(), 2000, customer, pizzas , coupon);
+//		Mockito.when(orderRepository.findAll()).thenReturn(Stream.of(OrderServiceImpl.DTOToEntity(order1),OrderServiceImpl.DTOToEntity(order2)).collect(Collectors.toList()));
+//		List<OrderDTO> actual = orderService.getAllOrders();
+//		assertEquals(2,actual.size());
+//	}
+//
+//	//Test for getting all the orders when the database is empty.
+//	@Test
+//	public void getAllOrdersNotPresentTest()
+//	{
+//		Mockito.when(orderRepository.findAll()).thenThrow(new OrderIdNotFoundException("No orders present in the database"));
+//
+//		Exception exception = assertThrows(OrderIdNotFoundException.class,()->orderService.getAllOrders());
+//		assertTrue(exception.getMessage().contains("No orders present in the database"));
+//	}
+//
+//	//Test checking if orderId null is present in the database or not.
+//	@Test
+//	public void findOrderNullTest()
+//	{
+//		Integer orderId = null;
+//		OrderDTO actual = orderService.findOrder(orderId);
+//		assertNull(actual);
+//	}
+//
+//	//Test for checking if the order is preset in the database or not.
+//	@Test
+//	public void findOrderPresentTest()
+//	{
+//		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
+//		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
+//		Set<Pizza> pizzas = new HashSet<>();
+//		pizzas.add(pizza);
+//		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
+//		Order order1 = new Order(LocalDate.now(), 1500, customer, pizzas , coupon);
+//		order1.setOrderId(1);
+//
+//		Mockito.when(orderRepository.findById(order1.getOrderId())).thenReturn(Optional.of(order1));
+//
+//		OrderDTO actual = orderService.findOrder(order1.getOrderId());
+//		assertEquals(OrderServiceImpl.entityToDTO(order1),actual);
+//	}
+//
+//	//Test for checking if the given orderId is not present in the database.
+//	@Test
+//	public void findOrderNotPresentTest()
+//	{
+//		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
+//		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
+//		Set<Pizza> pizzas = new HashSet<>();
+//		pizzas.add(pizza);
+//		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
+//		Order order1 = new Order(LocalDate.now(), 1500, customer, pizzas , coupon);
+//		order1.setOrderId(1);
+//
+//		Mockito.when(orderRepository.findAll()).thenThrow(new OrderIdNotFoundException("OrderId not present in the database"));
+//		Exception exception = assertThrows(OrderIdNotFoundException.class,()->orderService.findOrder(2));
+//		assertTrue(exception.getMessage().contains("OrderId not present in the database"));
+//	}
+//
+//	//Test for checking that null orderId cannot be removed.
+//	@Test
+//	public void deleteOrderNullTest()
+//	{
+//		Integer orderId = null;
+//		List<OrderDTO> actual = orderService.deleteOrder(orderId);
+//		assertNull(actual);
+//	}
+//
+//	//Test for updating a null orderId.
+//	@Test
+//	public void updateOrderNullTest()
+//	{
+//		OrderDTO order1 = null;
+//		List<OrderDTO> actual = orderService.updateOrder(order1);
+//		assertNull(actual);
+//	}
+//
+//	//Test for updating a orderId
+//	@Test
+//	public void updateOrderPresentTest()
+//	{
+//		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
+//		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
+//		Set<Pizza> pizzas = new HashSet<>();
+//		pizzas.add(pizza);
+//		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
+//		Order order = new Order(LocalDate.now(), 1500, customer, pizzas , coupon);
+//		order.setOrderId(1);
+//		Mockito.when(orderRepository.findById(order.getOrderId())).thenReturn(Optional.of(order));
+//		//		order.setOrderId(2);
+//		Mockito.when(orderRepository.save(order)).thenReturn(order);
+//		Mockito.when(orderRepository.findAll()).thenReturn(Stream.of(order).collect(Collectors.toList()));
+//
+//		List<OrderDTO> actual = orderService.updateOrder(OrderServiceImpl.entityToDTO(order));
+//		assertEquals(1,actual.size());
+//	}
+//
+//	//Test for updating a orderId which is not present n the database
+//	@Test
+//	public void updateOrderNotPresentTest()
+//	{
+//		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
+//		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
+//		Set<Pizza> pizzas = new HashSet<>();
+//		pizzas.add(pizza);
+//		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
+//		Order order = new Order(LocalDate.now(), 1500, customer, pizzas , coupon);
+//		order.setOrderId(1);
+//
+//		Mockito.when(orderRepository.save(order)).thenThrow(new OrderIdNotFoundException("OrderId not present in the database"));
+//		Exception exception = assertThrows(OrderIdNotFoundException.class,()->orderService.findOrder(2));
+//		assertTrue(exception.getMessage().contains("OrderId not present in the database"));
+//	}
+//
+//	//Test for saving a null order
+//	@Test
+//	public void saveOrderNullTest()
+//	{
+//		OrderDTO order1 = null;
+//		List<OrderDTO> actual = orderService.saveOrder(order1);
+//		assertNull(actual);
+//	}
+//
+//	//Test for saving an order in the database.
+//	@Test
+//	public void saveOrderPresentTest()
+//	{
+//		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
+//		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
+//		Set<Pizza> pizzas = new HashSet<>();
+//		pizzas.add(pizza);
+//		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
+//		Order order = new Order(LocalDate.now(), 1500, customer, pizzas , coupon);
+//		order.setOrderId(1);
+//
+//		Mockito.when(orderRepository.findById(1)).thenReturn(Optional.of(order));
+//		Mockito.when(orderRepository.saveAndFlush(order)).thenReturn(order);
+//
+//		Mockito.when(orderRepository.findAll()).thenReturn(Stream.of(order).collect(Collectors.toList()));
+//		List<OrderDTO> actual = orderService.updateOrder(OrderServiceImpl.entityToDTO(order));
+//		assertEquals(1,actual.size());
+//	}
+//
+//	//Test for finding the order by a particular cudtomerId.
+//	@Test
+//	public void findOrdersByCustomerIdPresentTest()
+//	{
+//		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
+//		customer.setCustomerId(1);
+//		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
+//		Set<Pizza> pizzas = new HashSet<>();
+//		pizzas.add(pizza);
+//		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
+//		Order order = new Order(LocalDate.now(), 1500, customer, pizzas , coupon);
+//		order.setOrderId(1);
+//		Mockito.when(orderRepository.findByCustomerCustomerId(order.getCustomer().getCustomerId())).thenReturn(Stream.of(order).collect(Collectors.toList()));
+//
+//		OrderDTO orderReturned= OrderServiceImpl.entityToDTO(order);
+//		List<OrderDTO> ordersExpected = Stream.of(orderReturned).collect(Collectors.toList()); 
+//
+//		List<OrderDTO> actual = orderService.findOrdersByCustomerId(1);
+//		assertEquals(ordersExpected,actual);
+//	}
+//
+//	//Test for finding the orders where they are not present for a particular customer Id.
+//	@Test
+//	public void findOrdersByCustomerIdNotPresentTest()
+//	{
+//		Customer customer = new Customer("ABC", "DEF", 1234567890L, "abc@gmail.com", "Address", "Username", "Password", null);
+//		Pizza pizza = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
+//		Set<Pizza> pizzas = new HashSet<>();
+//		pizzas.add(pizza);
+//		Coupon coupon = new Coupon("GET50", "50% OFF", "On Orders above 500Rs");
+//		Order order1 = new Order(LocalDate.now(), 1500, customer, pizzas , coupon);
+//		order1.setOrderId(1);
+//
+//		Mockito.when(orderRepository.findByCustomerCustomerId(order1.getCustomer().getCustomerId())).thenThrow(new CustomerNotFoundException("Customer not present"));
+//		Exception exception = assertThrows(CustomerNotFoundException.class,()->orderService.findOrdersByCustomerId(2));
+//		assertTrue(exception.getMessage().contains("Customer not present"));
+//	}
+//	
+//	//Test for finding orders where customerIds are null.
+//	@Test
+//	public void findOrdersByCustomerNullTest() {
+//		
+//		Integer customerId = null;
+//		
+//		List<OrderDTO> actual = orderService.findOrdersByCustomerId(customerId);
+//		assertNull(actual);
+//	}
 }

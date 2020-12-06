@@ -14,6 +14,7 @@ import com.cg.onlinepizza.dto.CustomerDTO;
 import com.cg.onlinepizza.dto.OrderDTO;
 import com.cg.onlinepizza.exceptions.CustomerAlreadyExistsException;
 import com.cg.onlinepizza.exceptions.CustomerNotFoundException;
+import com.cg.onlinepizza.exceptions.CustomerUserNameNotFoundException;
 import com.cg.onlinepizza.exceptions.CustomersNotPresentException;
 import com.cg.onlinepizza.model.Customer;
 import com.cg.onlinepizza.model.Order;
@@ -198,7 +199,7 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 
 	@Override
-	public CustomerDTO signIn(CustomerDTO customerDTO) throws CustomerNotFoundException {
+	public CustomerDTO signIn(CustomerDTO customerDTO) throws CustomerUserNameNotFoundException {
 
 		if (customerDTO == null) {
 			return null;
@@ -210,15 +211,17 @@ public class CustomerServiceImpl implements CustomerService{
 			throw new CustomerNotFoundException("Customer Not Found");
 		}
 
-		Optional<Customer> option = customerRepository.findById(customer.getCustomerId());
-		if (!option.isPresent()) {
+		Optional<Customer> option = customerRepository.findByUserName(customer.getUserName());
+		if (!option.get().getUserName().equals(customerDTO.getUserName())) {
 			log.warn("No User Available");
-			throw new CustomerNotFoundException("Customer Not Found");
+			throw new CustomerUserNameNotFoundException("Customer Not Found");
 		}
-
-		if (!option.get().getPassword().equals(customerDTO.getPassword())) {
-			log.warn("No User Available");
-			throw new CustomerNotFoundException("Customer Not Found");
+		else
+		{
+			if (!option.get().getPassword().equals(customerDTO.getPassword())) {
+				log.warn("No User Available");
+				throw new CustomerNotFoundException("Customer Not Found");
+			}
 		}
 
 		customer = option.get();

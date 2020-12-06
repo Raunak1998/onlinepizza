@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,10 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cg.onlinepizza.dto.CustomerDTO;
 import com.cg.onlinepizza.exceptions.CustomerAlreadyExistsException;
 import com.cg.onlinepizza.exceptions.CustomerNotFoundException;
+import com.cg.onlinepizza.exceptions.CustomerUserNameNotFoundException;
 import com.cg.onlinepizza.exceptions.CustomersNotPresentException;
 import com.cg.onlinepizza.service.CustomerService;
 
-
+@CrossOrigin
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
@@ -65,15 +67,12 @@ public class CustomerController {
 		return new ResponseEntity<List<CustomerDTO>>(customers, HttpStatus.OK);
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/login")
-	public ResponseEntity<CustomerDTO> signIn(@Valid @RequestBody CustomerDTO customerDTO) {
-
-		CustomerDTO customers = customerService.signIn(customerDTO);
-		if (customers == null) {
-			return new ResponseEntity("Sorry! Users not available!", HttpStatus.NOT_FOUND);
+	public ResponseEntity<CustomerDTO> signIn( @RequestBody CustomerDTO customerDTO) throws CustomerUserNameNotFoundException
+		{
+			CustomerDTO customer = customerService.signIn(customerDTO);
+			return new ResponseEntity<CustomerDTO>(customer, HttpStatus.OK);
 		}
-		return new ResponseEntity<CustomerDTO>(customers, HttpStatus.OK);
 	}
-}
+
 

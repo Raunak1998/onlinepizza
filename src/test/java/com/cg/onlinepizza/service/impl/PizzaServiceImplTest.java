@@ -173,14 +173,5 @@ public class PizzaServiceImplTest {
 		List<PizzaDTO> actual = pizzaService.getAllPizza();
 		assertEquals(1,actual.size());
 	}
-	/*
-	@Test
-	public void saveExistingPizza() throws PizzaAlreadyExistsException{
-		Pizza pizza1 = new Pizza("Veg", "Medium", "Veg Exotica", "Premium Veg Pizza", 500);
-		pizza1.setPizzaId(1);
-		Mockito.when(pizzaRepository.saveAndFlush(pizza1)).thenThrow(new PizzaAlreadyExistsException("Pizza Already Exists,Pizza can not be added"));
-		Exception exception = assertThrows(PizzaAlreadyExistsException.class,()->pizzaService.savePizza(PizzaServiceImpl.entityToDTO(pizza1)));
-		assertTrue(exception.getMessage().contains("Pizza Already Exists,Pizza can not be added"));
-	}
-	*/
+	
 }

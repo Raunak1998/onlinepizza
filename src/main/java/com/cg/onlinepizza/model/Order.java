@@ -2,8 +2,7 @@ package com.cg.onlinepizza.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Set;
-
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,7 +40,7 @@ public class Order implements Serializable{
 	
 	@ManyToMany
 	@JoinTable(name = "pizza_order_details", joinColumns = {@JoinColumn(name = "order_id")}, inverseJoinColumns = {@JoinColumn(name = "pizza_id")})
-	private Set<Pizza> pizzas;
+	private List<Pizza> pizzas;
 	
 	@ManyToOne
 	@JoinColumn(name = "coupon_name")
@@ -52,7 +51,7 @@ public class Order implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public Order(LocalDate orderDate, double totalCost, Customer customer, Set<Pizza> pizzas, Coupon coupon) {
+	public Order(LocalDate orderDate, double totalCost, Customer customer, List<Pizza> pizzas, Coupon coupon) {
 		super();
 		this.orderDate = orderDate;
 		this.totalCost = totalCost;
@@ -93,11 +92,11 @@ public class Order implements Serializable{
 		this.customer = customer;
 	}
 
-	public Set<Pizza> getPizzas() {
+	public List<Pizza> getPizzas() {
 		return pizzas;
 	}
 
-	public void setPizzas(Set<Pizza> pizzas) {
+	public void setPizzas(List<Pizza> pizzas) {
 		this.pizzas = pizzas;
 	}
 

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.cg.onlinepizza.dto.CustomerDTO;
 import com.cg.onlinepizza.exceptions.CustomerAlreadyExistsException;
 import com.cg.onlinepizza.exceptions.CustomerNotFoundException;
+import com.cg.onlinepizza.exceptions.CustomerUserNameNotFoundException;
 import com.cg.onlinepizza.exceptions.CustomersNotPresentException;
 
 @Service
@@ -22,7 +23,7 @@ public interface CustomerService {
 
 	public List<CustomerDTO> updateCustomer(CustomerDTO customerDTO)throws CustomerNotFoundException;
 
-	public CustomerDTO signIn(CustomerDTO customerDTO) ;
+	public CustomerDTO signIn(CustomerDTO customerDTO) throws CustomerUserNameNotFoundException ;
 
 }
 
