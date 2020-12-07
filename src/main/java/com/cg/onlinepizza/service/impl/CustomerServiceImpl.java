@@ -3,6 +3,7 @@ package com.cg.onlinepizza.service.impl;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
@@ -199,7 +200,7 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 
 	@Override
-	public CustomerDTO signIn(CustomerDTO customerDTO) throws CustomerUserNameNotFoundException {
+	public CustomerDTO signIn(CustomerDTO customerDTO) throws NoSuchElementException,CustomerUserNameNotFoundException,CustomerNotFoundException {
 
 		if (customerDTO == null) {
 			return null;

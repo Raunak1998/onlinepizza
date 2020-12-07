@@ -67,7 +67,7 @@ public class CustomerController {
 		return new ResponseEntity<List<CustomerDTO>>(customers, HttpStatus.OK);
 	}
 	
-	@GetMapping("/login")
+	@PostMapping("/login")
 	public ResponseEntity<CustomerDTO> signIn( @RequestBody CustomerDTO customerDTO) throws CustomerUserNameNotFoundException
 		{
 			CustomerDTO customer = customerService.signIn(customerDTO);

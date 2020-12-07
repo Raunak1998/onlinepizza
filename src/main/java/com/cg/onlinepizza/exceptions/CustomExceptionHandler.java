@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpHeaders;
@@ -140,7 +141,17 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler{
 	public ResponseEntity<Object> handleCustomerUserNameNotFoundException(CustomerUserNameNotFoundException exception, WebRequest request) {
 
 		ExceptionResponse exceptionResponse = new ExceptionResponse();
-		exceptionResponse.setStatus(404);
+		exceptionResponse.setStatus(400);
+		exceptionResponse.setTime(LocalDateTime.now());
+		exceptionResponse.setMessage(exception.getMessage());
+
+		return new ResponseEntity<Object> (exceptionResponse, HttpStatus.NOT_FOUND);
+	}
+	@ExceptionHandler(NoSuchElementException.class)
+	public ResponseEntity<Object> handleNoSuchElementException(NoSuchElementException exception, WebRequest request) {
+
+		ExceptionResponse exceptionResponse = new ExceptionResponse();
+		exceptionResponse.setStatus(400);
 		exceptionResponse.setTime(LocalDateTime.now());
 		exceptionResponse.setMessage(exception.getMessage());
 
