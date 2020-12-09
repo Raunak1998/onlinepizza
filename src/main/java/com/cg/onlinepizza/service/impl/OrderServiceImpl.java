@@ -193,7 +193,7 @@ public class OrderServiceImpl implements OrderService {
 
 	//Methods adds the details of the order in the database.
 	@Override
-	public List<OrderDTO> saveOrder(OrderDTO orderDTO) throws DatabaseException{
+	public OrderDTO saveOrder(OrderDTO orderDTO) throws DatabaseException{
 		
 		log.info("Service Layer - Entry - Save Orders");
 		if(orderDTO==null)
@@ -206,14 +206,9 @@ public class OrderServiceImpl implements OrderService {
 		{
 			throw new DatabaseException("Order cannot be added!");
 		}
-		List<OrderDTO> orderDTOReturn = new ArrayList<>();
-		for(Order o:orderRepository.findAll())
-		{
-			orderDTOReturn.add(entityToDTO(o));
-		}
 
 		log.info("Service Layer - Exit - Save Orders");
-		return  orderDTOReturn;
+		return  entityToDTO(order);
 	}
 
 	//Method checks for the existing orders in the database and updates the details.

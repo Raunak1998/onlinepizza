@@ -38,10 +38,10 @@ public class OrderController {
 	}
 
 	@PostMapping("/insert")
-	public ResponseEntity<List<OrderDTO>> insertOrder(
+	public ResponseEntity<OrderDTO> insertOrder(
 			@Valid @RequestBody OrderDTO order) throws DatabaseException{
-		List<OrderDTO> orders = orderService.saveOrder(order);
-		return new ResponseEntity<List<OrderDTO>>(orders,HttpStatus.OK);
+		OrderDTO orders = orderService.saveOrder(order);
+		return new ResponseEntity<OrderDTO>(orders,HttpStatus.OK);
 	}
 
 	@DeleteMapping("/delete/{orderId}")
